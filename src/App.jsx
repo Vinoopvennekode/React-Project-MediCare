@@ -1,11 +1,14 @@
 import React from 'react';
-
-import './App.css';
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import User from './Routes/User';
 function App() {
   return (
-    <div className="bg-black text-white flex justify-center">
-      <h1>hiii</h1>
+    <div className="App">
+   <Router>
+        <Routes>
+          <Route path='/*' element={<User />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
