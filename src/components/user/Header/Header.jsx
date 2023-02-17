@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import { AppBar, styled, Toolbar, Typography, Avatar } from "@mui/material";
+import {
+  AppBar,
+  styled,
+  Toolbar,
+  Typography,
+  Avatar,
+  Menu,
+  MenuItem,
+  Box,
+} from "@mui/material";
 import { AddAPhoto } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setLogout } from "../../../Store/Slice/UserLogin";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -15,16 +27,16 @@ const IconBox = styled(Toolbar)({
   align: "center",
 });
 
-const UserBox = styled(Toolbar)({
+const UserBox = styled(Box)(({ theme }) => ({
   display: "flex",
   gap: "20px",
-  align: "center",
-});
+  alignItems: "center",
+}));
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#57CC99",
+      main: "#000000",
     },
     secondary: {
       main: "#57CC99",
@@ -33,13 +45,32 @@ const theme = createTheme({
 });
 
 const Header = () => {
+  const [open, setOpen] = useState(false);
+  const [currentUser, setcurrentUser] = useState(null);
+  const { name } = useSelector((state) => state.userLogin);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (name) {
+      setcurrentUser(name);
+    } else {
+      setcurrentUser(null);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    setcurrentUser(null);
+  };
+
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <AppBar position="sticky" color={"secondary"}>
+        <AppBar position="fixed" color={"secondary"}>
           <StyledToolbar>
-            <IconBox>
-              <AddAPhoto />
+            <IconBox  onClick={() => navigate("/")} >
+              <img src="./logo2.png" width={'50px'} alt="" />
               <Typography
                 variant="h6"
                 sx={{ display: { xs: "none", sm: "block" } }}
@@ -47,13 +78,41 @@ const Header = () => {
                 Medi care
               </Typography>
             </IconBox>
-            <UserBox>
-              <Avatar
-                sx={{ width: "30px", height: "30px" }}
-                src="https://w7.pngwing.com/pngs/481/915/png-transparent-computer-icons-user-avatar-woman-avatar-computer-business-conversation-thumbnail.png"
-              />
-              <Typography varient="span">vinoop</Typography>
-            </UserBox>
+
+            {currentUser ? (
+              <div>
+                <UserBox onClick={(e) => setOpen(true)}>
+                  <Avatar
+                    sx={{ width: "30px", height: "30px" }}
+                    src="https://w7..com/pngs/481/915/png-transparent-computer-icons-user-avatar-woman-avatar-computer-business-conversation-thumbnail.png"
+                  />
+                  <Typography varient="span">{currentUser}</Typography>
+                </UserBox>
+                <Menu
+                  onClose={(e) => setOpen(false)}
+                  id="demo-positioned-menu"
+                  aria-labelledby="demo-positioned-button"
+                  open={open}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                >
+                  <MenuItem>Profile</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              <div>
+                <Button onClick={() => navigate("/signin")} variant="outlined">
+                  Login/Signup
+                </Button>
+              </div>
+            )}
           </StyledToolbar>
         </AppBar>
       </ThemeProvider>

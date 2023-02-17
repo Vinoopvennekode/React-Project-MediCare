@@ -1,6 +1,7 @@
 import React from "react";
 
 const Card = () => {
+  
   return (
     <>
       <div className="card bg-white w-[200px] h-[350px] m-2 rounded-lg shadow-lg ">
@@ -19,17 +20,8 @@ const Card = () => {
             5.4 cm (6.1-inch) display1
           </div>
 
-          <div className="pricing flex items-center">
-            {" "}
-            <div className="price ">$1000</div>
-            <div className="ml-2 text-xs ">
-              $<del>1320</del>
-            </div>
-          </div>
-          <div className="flex items-center my-2">
-            <button className="border px-3 py-1 text-xs rounded-lg mr-1 ">
-              Buy Now
-            </button>
+          <div className="flex justify-center items-center my-2">
+            
             <button className="border px-3 py-1 text-xs rounded-lg ">
               Add to Cart
             </button>
