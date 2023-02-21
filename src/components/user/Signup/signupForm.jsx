@@ -91,9 +91,10 @@ export default function SigninForm() {
               if (data.password.length >= 6) {
                 setPassword(false);
                 setPasswordError("");
-                axios.post("/userSignup", data).then((response) => {
+                axios.post("/userSignup", data).then(async(response) => {
                   if (response.data.status === "success") {
-                    navigate("/signin");
+                        navigate("/signin")
+
                   } else {
                     toast(response.data.message);
                   }
@@ -115,8 +116,8 @@ export default function SigninForm() {
           setEmailError("Please enter valid Email");
         }
       } else {
-        setname(true);
-        setnameError("Please enter valid Name");
+        setName(true);
+        setNameError("Please enter valid Name");
       }
     } else {
       setTotalRequired("Please enter your Details");
@@ -127,7 +128,7 @@ export default function SigninForm() {
     //     } else {
     //       swal('OOPS', response.data.message, 'error');
     //     }
-    //   });
+    //   }); 
     // };
   };
   return (

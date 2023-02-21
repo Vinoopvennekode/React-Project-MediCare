@@ -1,0 +1,10 @@
+import React from 'react'
+import SignupForm from '../../components/Docter/Signup/SignupForm'
+
+function Signup() {
+  return (
+   <SignupForm/>
+  )
+}
+
+export default Signup

@@ -35,6 +35,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../../axios/axios";
 // import { adminDetails } from '../../../redux/admin';
 import { setLogout } from "../../../Store/Slice/AdminLogin";
+import Table from '../../../components/admin/Table/table'
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -329,6 +330,7 @@ function AdminMain() {
           }}
         >
           <Toolbar />
+        <Table/>
         </Box>
       </Box>
     </ThemeProvider>

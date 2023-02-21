@@ -1,7 +1,14 @@
 import React from "react";
 
 const Card2 = () => {
-  const arr = ["Acne, pimple or skin issues", "Cold, cough or fever", "Child not feeling well", "Depression or anxiety", "Period doubts or Pregnancy ", "Joint pain or muscle pain in children"];
+  const arr = [
+    "Acne, pimple or skin issues",
+    "Cold, cough or fever",
+    "Child not feeling well",
+    "Depression or anxiety",
+    "Period doubts or Pregnancy ",
+    "Joint pain or muscle pain in children",
+  ];
 
   return (
     <>
