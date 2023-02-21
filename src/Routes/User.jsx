@@ -4,6 +4,9 @@ import Signup from "../Pages/User/Signup";
 import Signin from "../Pages/User/Signin";
 import DocterList from "../Pages/User/DocterList";
 
+import publicRouter from "../utils/publicRouter";  
+import protectRouter from "../utils/protectRouter";
+
 function User() {
   return (
     <>
