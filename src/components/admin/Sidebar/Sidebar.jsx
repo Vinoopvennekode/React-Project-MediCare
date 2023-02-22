@@ -96,6 +96,7 @@ function Sidebar() {
               justifyContent: open ? "initial" : "last",
               px: 2.5,
             }}
+            onClick={() => navigate('/admin/dashboard')}
           >
             <ListItemIcon
               sx={{
@@ -118,7 +119,7 @@ function Sidebar() {
               justifyContent: open ? "initial" : "last",
               px: 2.5,
             }}
-            // onClick={() => navigate('/admin/seeker')}
+            onClick={() => navigate('/admin/users')}
           >
             <ListItemIcon
               sx={{
@@ -141,7 +142,7 @@ function Sidebar() {
               justifyContent: open ? "initial" : "last",
               px: 2.5,
             }}
-            // onClick={() => navigate('/admin/recruiter')}
+            onClick={() => navigate('/admin/doctors')}
           >
             <ListItemIcon
               sx={{
@@ -164,6 +165,7 @@ function Sidebar() {
               justifyContent: open ? "initial" : "last",
               px: 2.5,
             }}
+            onClick={() => navigate('/admin/departments')}
           >
             <ListItemIcon
               sx={{

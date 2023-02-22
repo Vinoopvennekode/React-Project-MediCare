@@ -5,6 +5,7 @@ import Register from "../Pages/Docter/Register";
 import Approval from "../Pages/Docter/Approval";
 import Home from '../Pages/Docter/DocterHome'
 import Signin from '../Pages/Docter/Signin'
+
 function Admin() {
   return (
     <>
@@ -14,7 +15,7 @@ function Admin() {
         <Route path="/approval" element={<Approval />} />
         <Route path="/home" element={<Home/>} />
         <Route path="/signin" element={<Signin/>} />
-
+        
 
 
       </Routes>

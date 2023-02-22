@@ -1,31 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
 
-function table() {
-  const [users, setUsers] = useState([]);
+function DocterPending() {
+  const [doctors, setDoctors] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    axios.get("/admin/users").then((res) => {
-      setUsers(res.data.users);
+    axios.get("/admin/pending").then((res) => {
+      setDoctors(res.data.doctor);
     });
   }, [refresh]);
 
-  const blockUser = (id) => {
-    axios.patch("/admin/blockUser", { id }).then((res) => {
-      if (res.data.success) {
-        console.log(res.data);
-        setRefresh(!refresh)
-       
-      } else {
-        message.error(res.data.message);
-      }
-    });
-  };
 
-  const unblockUser = (id) => {
+  const approve = (id) => {
     console.log(id, "unblock");
-    axios.patch("/admin/unblockUser", { id }).then((response) => {
+    axios.patch("/admin/approve", { id }).then((response) => {
       if (response.data.success) {
         console.log(response.data);
         setRefresh(!refresh)
@@ -39,7 +28,9 @@ function table() {
   return (
     <>
       <div class="p-10 h-screen bg-gray-200">
-        <h1 class="text-xl mb-2">Users</h1>
+        <div className="flex justify-between mb-3">
+        <h1 class="text-xl mb-2">Pending to approve</h1>
+        </div>
         <div class="overflow-auto rounded-lg shadow-md">
           <table class="w-full">
             <thead class="bg-gray-100 border-b-2 border-gray-200">
@@ -60,37 +51,23 @@ function table() {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              {users.map((user) => (
+              {doctors.map((doctor) => (
                 <tr>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user._id}
+                    {doctor._id}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                     {" "}
-                    {user.name}
+                    {doctor.firstName}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user.email}
+                    {doctor.email}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user.phone}
+                    {doctor.phone}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user.block == true ? (
-                      <button
-                        onClick={()=>unblockUser(user._id)}
-                        className=" p-1.5 text-xs font-medium uppercase tracking-wider text-white bg-green-600 rounded-lg bg-opacity-75 cursor-pointer hover:bg-opacity-95"
-                      >
-                        Unblock
-                      </button>
-                    ) : (
-                      <button
-                        onClick={()=>blockUser(user._id)}
-                        className="  p-1.5 text-xs font-medium uppercase tracking-wider text-white bg-red-600 rounded-lg bg-opacity-75 cursor-pointer"
-                      >
-                        Block
-                      </button>
-                    )}
+                  <button onClick={()=>approve(doctor._id)} className="p-2 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer uppercase hover:bg-opacity-95"> approve</button>
                   </td>
                 </tr>
               ))}
@@ -102,4 +79,4 @@ function table() {
   );
 }
 
-export default table;
+export default DocterPending;
