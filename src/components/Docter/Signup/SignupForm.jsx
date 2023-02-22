@@ -60,8 +60,10 @@ function SignupForm() {
                 setPasswordError("");
                 setConfPasswordError("");
                 axios.post("/docter/signup", data).then((response) => {
-                  console.log(response.data);
+                 
                   if (response.data.status === "success") {
+                    console.log(response.data)
+                    localStorage.setItem('doctorToken',JSON.stringify(response.data))
                     navigate("/docter/register");
                   } else {
                     toast(response.data.message);

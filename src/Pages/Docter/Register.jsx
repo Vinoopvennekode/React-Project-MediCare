@@ -4,7 +4,6 @@ import Header from '../../components/user/Header/Header'
 function Register() {
   return (
     <>
-    <Header/>
     <Registerform/>
     </>
   )
