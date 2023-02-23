@@ -15,9 +15,12 @@ import { userLoginSlice } from "./Slice/UserLogin";
 import { DocterLoginSlice } from "./Slice/DocterLogin";
 
 const persistConfig = { key: "root", storage, version: 1 };
+const persistConfiguser = { key: "user", storage, version: 1 };
+
+
 
 const userLoginPersistedReducer = persistReducer(
-  persistConfig,
+  persistConfiguser,
   userLoginSlice.reducer
 );
 

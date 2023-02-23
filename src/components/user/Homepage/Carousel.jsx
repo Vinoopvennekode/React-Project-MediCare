@@ -1,18 +1,16 @@
-import React from "react";
+import React ,{useState,useEffect}from "react";
 import Card from "./Card";
-
+import axios from '../../../axios/axios'
 import { AddAPhoto } from "@mui/icons-material";
 
 const Carousel = () => {
-  const arr = [
-    "Cardiology",
-    "Endocrinology",
-    "Family Medicine",
-    "Neurology",
-    "Pathology",
-    "Pediatrics",
-    "Urology",
-  ];
+  const [departments,setDepartments]=useState([])
+ 
+  useEffect(() => {
+    axios.get("/departments").then((res) => {
+        setDepartments(res.data.departments);
+    });
+  }, []);
 
   const scrollLeft = () => {
     document.getElementById("content").scrollLeft -= 400;
@@ -51,23 +49,23 @@ const Carousel = () => {
           id="content"
           className="carousel p-4 flex items-center justify-start overflow-x-auto scroll-smooth  scrollbar-hide "
         >
-          {arr.map((name) => {
+          {departments.map((dep) => {
             return (
               <div>
                 <div className="card bg-white w-[200px] h-[310px] m-5 rounded-lg shadow-lg  ">
                   <div className="top">
                     <img
                       className="w-[200px] h-[200px] object-cover  p-2"
-                      src="https://www.towerdental.com.au/uploads/170/46/Untitled-design-49.png"
+                      src={dep.deptImg}
                       alt="img"
                     />
                   </div>
-                  <div className="bottom flex flex-col justify-center items-start p-3 bg-">
+                  <div className="bottom flex flex-col justify-center items-center p-3 bg-">
                     <div className="title font-semibold text-xs my-1">
-                      {name}
+                      {dep.name}
                     </div>
                     <div className="category text-xs font-light my-1">
-                      Speciality
+                      {dep.description}
                     </div>
 
                     <div className="flex justify-center my-2">
