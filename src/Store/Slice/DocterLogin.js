@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export const DocterLoginSlice = createSlice({
-  name: "DocterLogin",
+  name: "docterLogin",
   initialState,
   reducers: {
     setLogin: (state, action) => {

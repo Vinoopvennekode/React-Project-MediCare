@@ -3,8 +3,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../../axios/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "@mui/material/Link";
+import { useDispatch } from "react-redux";
+import { setLogin } from "../../../Store/Slice/DocterLogin";
+
 
 function SigninForm() {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState(false);
@@ -36,9 +41,15 @@ function SigninForm() {
           axios.post("/docter/login", data).then((response) => {
             
             console.log(response.data);
-            
+            const doctor=response.data.docterLogin
             if (response.data.docterLogin.Status) {
-                console.log('ethiiknnnn');
+              dispatch(
+                setLogin({
+                  user: "docter",
+                  name: doctor.name,
+                  token: doctor.token,
+                })
+              );
               localStorage.setItem(
                 "doctorToken",
                 JSON.stringify(response.data.docterLogin)
@@ -70,8 +81,7 @@ function SigninForm() {
               <h1 class=" text-3xl mb-3">Welcome</h1>
               <div>
                 <p class="">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aenean suspendisse aliquam varius rutrum purus maecenas ac{" "}
+               
                   <a href="#" class=" font-semibold">
                     Learn more
                   </a>
@@ -79,9 +89,9 @@ function SigninForm() {
               </div>
             </div>
             <div class="w-full lg:w-1/2 py-16 px-12">
-              <h2 class="text-3xl mb-4">Signup</h2>
+              <h2 class="text-3xl mb-4">Signin</h2>
               <p class="mb-4">
-                Create your account. It’s free and only take a minute
+                Sign in your account.
               </p>
 
               <p class="text-red-500 text-xs italic"> {totalRequired}</p>
@@ -108,19 +118,7 @@ function SigninForm() {
                   <p class="text-red-500 text-xs italic">{passwordError}</p>
                 </div>
 
-                <div class="mt-5">
-                  <input type="checkbox" class="border border-gray-400" />
-                  <span>
-                    I accept the{" "}
-                    <a href="#" class=" font-semibold">
-                      Terms of Use
-                    </a>{" "}
-                    &{" "}
-                    <a href="#" class="">
-                      Privacy Policy
-                    </a>
-                  </span>
-                </div>
+                
                 <div class="mt-5">
                   <button
                     type="submit"
@@ -128,6 +126,13 @@ function SigninForm() {
                   >
                     Sign in
                   </button>
+                  <Link
+                  onClick={() => navigate("/docter/signup")}
+                  variant="body2"
+                  component="button"
+                >
+                  "Don't have an account? Sign Up"
+                </Link>
                 </div>
               </form>
             </div>

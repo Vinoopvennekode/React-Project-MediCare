@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
+import { useNavigate } from "react-router-dom";
 
 function DocterTable() {
   const [doctors, setDoctors] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const navigate=useNavigate()
 
   useEffect(() => {
     axios.get("/admin/doctors").then((res) => {
@@ -41,7 +43,7 @@ function DocterTable() {
       <div class="p-10 h-screen bg-gray-200">
         <div className="flex justify-between mb-3">
         <h1 class="text-xl mb-2">doctors</h1>
-        <button className="p-2 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">Pending to approve</button>
+        <button onClick={()=>navigate('/admin/pendingDoctors')} className="p-2 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">Pending to approve</button>
         </div>
         <div class="overflow-auto rounded-lg shadow-md">
           <table class="w-full">

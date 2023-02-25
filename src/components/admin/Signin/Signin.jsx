@@ -76,7 +76,7 @@ const Signin = () => {
                     token:admin.token
                   })
                 )
-                navigate("/admin/dashboard");
+                navigate("/admin/doctors");
               }
             });
           } else {

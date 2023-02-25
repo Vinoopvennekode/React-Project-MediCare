@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from '../../components/user/Header/Header'
+import Header from '../../components/Docter/Header'
 import Approvalpage from '../../components/Docter/Approval/Approval'
 
 function Approval() {

@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../../../axios/axios";
+import Swal from 'sweetalert2';
+import { message } from 'antd';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
+
 function department() {
   const location = useLocation();
+  const navigate=useNavigate()
   const [department, setDepartment] = useState([]);
   let data = location.state.id;
 
@@ -12,7 +20,44 @@ function department() {
       setDepartment(res.data.department);
     });
   }, []);
-  console.log(department);
+
+
+  const [dropdown, setDropdown] = useState(false);
+  function handleDelete(id) {
+    console.log(id);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this data!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // TODO: Implement delete logic
+        axios.delete(`/admin/deleteDepartment?id=${id}`).then((response) => {
+            if(response.data.success){
+                console.log(response.data,"response");
+                toast(response.data.message)
+     
+            navigate('/admin/departments')
+            }else{
+              toast(response.data.message)
+            }
+          })
+         
+        Swal.fire('Deleted!', 'Your data has been deleted.', 'success');
+        setDropdown(!dropdown)
+
+      }else{
+        setDropdown(!dropdown)
+      }
+    });
+  }
+
+
+  
   return (
     <div className="m-8 flex justify-center">
       <div className="bg-white h-full w-[500px] flex flex-col  items-center">
@@ -23,6 +68,7 @@ function department() {
         <div className="p-6">
           <h4>{department.description}</h4>
         </div>
+       
         <div>
           {department.status == true ? (
             <p className="p-6">Status:ACTIVE</p>
@@ -31,10 +77,10 @@ function department() {
           )}
         </div>
         <div className="p-6">
-          <button className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
+          {/* <button className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
             EDIT
-          </button>
-          <button className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-red-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
+          </button> */}
+          <button    onClick={()=>handleDelete(department._id)} className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-red-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
             DELETE
           </button>
         </div>

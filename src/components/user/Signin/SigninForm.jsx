@@ -188,6 +188,16 @@ export default function SigninForm() {
                   "Don't have an account? Sign Up"
                 </Link>
               </Grid>
+              <Grid item>
+                <Link
+                  onClick={() => navigate("/docter/signup")}
+                  variant="body2"
+                  color="inherit"
+                  component="button"
+                >
+                  "Are you a doctor? Register Here"
+                </Link>
+              </Grid>
             </Grid>
           </Box>
         </Box>

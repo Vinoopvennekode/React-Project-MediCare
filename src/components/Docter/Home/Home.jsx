@@ -5,7 +5,7 @@ function Home() {
   return (
     <>
       <div className="mt-6">
-        <div className=" bg-slate-500 w-full h-[350px] md:h-[414px]   md:flex justify-between items-center">
+        <div className=" bg-slate-400 w-full h-[300px] md:h-[350px]   md:flex justify-between items-center">
           <div className="text-white text-lg p-4 ">WELCOME DOCTER</div>
           <div className="text-white text-6xl p-4">
             We care about your helth

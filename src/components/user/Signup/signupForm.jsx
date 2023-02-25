@@ -57,6 +57,8 @@ export default function SigninForm() {
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const [confpassword, setConfPassword] = useState(false);
+  const [confpasswordError, setConfPasswordError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
 
   const navigate = useNavigate();
@@ -68,13 +70,22 @@ export default function SigninForm() {
       name: data.get("name"),
       email: data.get("email"),
       password: data.get("password"),
+      confPassword: data.get("confPassword"),
       phoneNumber: data.get("phoneNumber"),
     };
-    if (data.name && data.email && data.password && data.phoneNumber) {
+    if (
+      data.name &&
+      data.email &&
+      data.password &&
+      data.phoneNumber &&
+      data.confPassword
+    ) {
       const regName = /^[a-zA-Z]+$/;
       const regEmail =
         /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
       const regPhone = /^[0-9]+$/;
+      const password =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
       setTotalRequired("");
       if (regName.test(data.name)) {
         setName(false);
@@ -88,20 +99,32 @@ export default function SigninForm() {
             if (data.phoneNumber.length === 10) {
               setPhoneNumber(false);
               setPhoneNumberError("");
-              if (data.password.length >= 6) {
+              if (password.test(data.password)) {
                 setPassword(false);
                 setPasswordError("");
-                axios.post("/userSignup", data).then(async(response) => {
-                  if (response.data.status === "success") {
-                        navigate("/signin")
-
-                  } else {
-                    toast(response.data.message);
-                  }
-                });
+                if (data.password === data.confPassword) {
+                  setPassword(false);
+                  setConfPassword(false);
+                  setPasswordError("");
+                  setConfPasswordError("");
+                  axios.post("/userSignup", data).then(async (response) => {
+                    if (response.data.status === "success") {
+                      navigate("/signin");
+                    } else {
+                      toast(response.data.message);
+                    }
+                  });
+                } else {
+                  setPassword(true);
+                  setConfPassword(true);
+                  setPasswordError("Password is not match");
+                  setConfPasswordError("Password is not match");
+                }
               } else {
                 setPassword(true);
-                setPasswordError("Minimum 6 character");
+                setPasswordError(
+                  "Minimum eight characters, at least one letter, one number and one special character"
+                );
               }
             } else {
               setPhoneNumber(true);
@@ -128,7 +151,7 @@ export default function SigninForm() {
     //     } else {
     //       swal('OOPS', response.data.message, 'error');
     //     }
-    //   }); 
+    //   });
     // };
   };
   return (
@@ -216,6 +239,19 @@ export default function SigninForm() {
               autoComplete="current-password"
               color="secondary"
             />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confPassword"
+              error={confpassword}
+              helperText={confpasswordError}
+              label="confirm Password"
+              type="password"
+              id="confPassword"
+              autoComplete="current-password"
+              color="secondary"
+            />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -230,7 +266,6 @@ export default function SigninForm() {
               Sign Up
             </Button>
             <Grid container>
-              
               <Grid item>
                 <Link
                   onClick={() => navigate("/signin")}

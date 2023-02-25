@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../../axios/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "@mui/material/Link";
 
 function SignupForm() {
   const [firstName, setfirstName] = useState(false);
@@ -41,6 +42,8 @@ function SignupForm() {
       const regEmail =
         /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
       const regPhone = /^[0-9]+$/;
+      const password =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
       setTotalRequired("");
       if (regName.test(data.firstName)) {
         setfirstName(false);
@@ -51,7 +54,7 @@ function SignupForm() {
           if (regEmail.test(data.email)) {
             setEmail(false);
             setEmailError("");
-            if (data.password.length >= 6) {
+            if (password.test(data.password)) {
               setPassword(false);
               setPasswordError("");
               if (data.password === data.confPassword) {
@@ -63,7 +66,7 @@ function SignupForm() {
                  
                   if (response.data.status === "success") {
                     console.log(response.data)
-                    localStorage.setItem('doctorToken',JSON.stringify(response.data))
+                    localStorage.setItem('docToken',JSON.stringify(response.data))
                     navigate("/docter/register");
                   } else {
                     toast(response.data.message);
@@ -77,7 +80,7 @@ function SignupForm() {
               }
             } else {
               setPassword(true);
-              setPasswordError("Minimum 6 character");
+              setPasswordError("Minimum eight characters, at least one letter, one number and one special character");
             }
           } else {
             setEmail(true);
@@ -99,17 +102,17 @@ function SignupForm() {
 
   return (
     <>
+    <ToastContainer/>
       <div class="min-h-screen py-40">
         <div class="container mx-auto">
           <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
             <div class="w-full lg:w-1/2 flex flex-col items-center justify-center p-12 bg-[#80ED99] bg-no-repeat bg-cover bg-center ">
-              <h1 class=" text-3xl mb-3">Welcome</h1>
+              <h1 class=" text-3xl mb-3">Welcome Doctor</h1>
               <div>
                 <p class="">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aenean suspendisse aliquam varius rutrum purus maecenas ac{" "}
-                  <a href="#" class=" font-semibold">
-                    Learn more
+                 
+                  <a href="#" class="">
+                    Learn more about Medicare
                   </a>
                 </p>
               </div>
@@ -195,6 +198,13 @@ function SignupForm() {
                   >
                     Register Now
                   </button>
+                  <Link
+                  onClick={() => navigate("/docter/signin")}
+                  variant="body2"
+                  component="button"
+                >
+                  "Don't have an account? Sign Up"
+                </Link>
                 </div>
               </form>
             </div>

@@ -4,6 +4,7 @@ import React from "react";
 
 const Banner = () => {
   const navigate = useNavigate();
+  
   return (
     <Box sx={{ width: "100%", backgroundColor: "#80ED99", marginTop: "55px" }}>
       <Grid container>
@@ -24,7 +25,7 @@ const Banner = () => {
             </Typography>
             <Button
               sx={{ marginTop: "20px" }}
-              onClick={() => navigate("/docterList")}
+              onClick={() => navigate("/docters")}
               color="success"
               variant="contained"
             >
