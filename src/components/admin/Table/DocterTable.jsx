@@ -6,15 +6,20 @@ function DocterTable() {
   const [doctors, setDoctors] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const navigate=useNavigate()
-
+  const adminToken=localStorage.getItem('admintoken')
+  console.log(adminToken);
   useEffect(() => {
-    axios.get("/admin/doctors").then((res) => {
+    axios.get("/admin/doctors",{headers:{'Authorization':adminToken}}).then((res) => {
+   console.log(res.data);
       setDoctors(res.data.doctor);
+    }).catch((error)=>{
+    
     });
   }, [refresh]);
 
+  
   const blockDoctor = (id) => {
-    axios.patch("/admin/blockDoctor", { id }).then((res) => {
+    axios.patch("/admin/blockDoctor",{id}).then((res) => {
       if (res.data.success) {
         console.log(res.data);
         setRefresh(!refresh)
@@ -28,7 +33,7 @@ function DocterTable() {
   const unblocDoctor = (id) => {
     console.log(id, "unblock");
     axios.patch("/admin/unblockDoctor", { id }).then((response) => {
-      if (response.data.success) {
+      if (response.data.success) { 
         console.log(response.data);
         setRefresh(!refresh)
       
@@ -65,32 +70,32 @@ function DocterTable() {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              {doctors.map((doctor) => (
+              {doctors?.map((doctor) => (
                 <tr>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {doctor._id}
+                    {doctor?._id}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                     {" "}
-                    {doctor.firstName}
+                    {doctor?.firstName}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {doctor.email}
+                    {doctor?.email}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {doctor.phone}
+                    {doctor?.phone}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {doctor.block == true ? (
+                    {doctor?.block == true ? (
                       <button
-                        onClick={()=>unblocDoctor(doctor._id)}
+                        onClick={()=>unblocDoctor(doctor?._id)}
                         className=" p-1.5 text-xs font-medium uppercase tracking-wider text-white bg-green-600 rounded-lg bg-opacity-75 cursor-pointer hover:bg-opacity-95"
                       >
                         Unblock
                       </button>
                     ) : (
                       <button
-                        onClick={()=>blockDoctor(doctor._id)}
+                        onClick={()=>blockDoctor(doctor?._id)}
                         className=" p-1.5 text-xs font-medium uppercase tracking-wider text-white bg-red-600 rounded-lg bg-opacity-75 cursor-pointer "
                       >
                         Block

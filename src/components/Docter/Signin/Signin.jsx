@@ -7,7 +7,6 @@ import Link from "@mui/material/Link";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../../Store/Slice/DocterLogin";
 
-
 function SigninForm() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState(false);
@@ -39,9 +38,8 @@ function SigninForm() {
           setPasswordError("");
 
           axios.post("/docter/login", data).then((response) => {
-            
             console.log(response.data);
-            const doctor=response.data.docterLogin
+            const doctor = response.data.docterLogin;
             if (response.data.docterLogin.Status) {
               dispatch(
                 setLogin({
@@ -54,6 +52,11 @@ function SigninForm() {
                 "doctorToken",
                 JSON.stringify(response.data.docterLogin)
               );
+              localStorage.setItem(
+                "docToken",
+                JSON.stringify(response.data.docterLogin.id)
+              );
+
               navigate("/docter/home");
             } else {
               toast(response.data.docterLogin.message);
@@ -81,7 +84,6 @@ function SigninForm() {
               <h1 class=" text-3xl mb-3">Welcome</h1>
               <div>
                 <p class="">
-               
                   <a href="#" class=" font-semibold">
                     Learn more
                   </a>
@@ -90,9 +92,7 @@ function SigninForm() {
             </div>
             <div class="w-full lg:w-1/2 py-16 px-12">
               <h2 class="text-3xl mb-4">Signin</h2>
-              <p class="mb-4">
-                Sign in your account.
-              </p>
+              <p class="mb-4">Sign in your account.</p>
 
               <p class="text-red-500 text-xs italic"> {totalRequired}</p>
 
@@ -118,7 +118,6 @@ function SigninForm() {
                   <p class="text-red-500 text-xs italic">{passwordError}</p>
                 </div>
 
-                
                 <div class="mt-5">
                   <button
                     type="submit"
@@ -127,12 +126,12 @@ function SigninForm() {
                     Sign in
                   </button>
                   <Link
-                  onClick={() => navigate("/docter/signup")}
-                  variant="body2"
-                  component="button"
-                >
-                  "Don't have an account? Sign Up"
-                </Link>
+                    onClick={() => navigate("/docter/signup")}
+                    variant="body2"
+                    component="button"
+                  >
+                    "Don't have an account? Sign Up"
+                  </Link>
                 </div>
               </form>
             </div>

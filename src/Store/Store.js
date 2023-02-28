@@ -33,7 +33,7 @@ const AdminLoginPersisteReducer = persistReducer(
 const DocterLoginPersistReducer = persistReducer(
   persistConfigdoctor,
   DocterLoginSlice.reducer
-);
+); 
 
 export const store = configureStore({
   reducer: {

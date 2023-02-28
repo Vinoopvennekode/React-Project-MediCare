@@ -9,8 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 function department() {
-  const location = useLocation();
   const navigate=useNavigate()
+  const location = useLocation();
   const [department, setDepartment] = useState([]);
   let data = location.state.id;
 
@@ -66,20 +66,20 @@ function department() {
           <h1 className=" text-bold text-xl">{department.name}</h1>
         </div>
         <div className="p-6">
-          <h4>{department.description}</h4>
+          <h4 className="text-sm">{department.description}</h4>
         </div>
        
         <div>
-          {department.status == true ? (
+          {department.status == 'Active' ? (
             <p className="p-6">Status:ACTIVE</p>
           ) : (
             <p className="p-6">Status:INACTIVE</p>
           )}
         </div>
         <div className="p-6">
-          {/* <button className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
+          <button onClick={()=>navigate('/admin/editDept',{state:{id:department._id}})} className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
             EDIT
-          </button> */}
+          </button>
           <button    onClick={()=>handleDelete(department._id)} className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-red-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
             DELETE
           </button>

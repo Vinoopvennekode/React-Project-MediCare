@@ -61,9 +61,8 @@ const Signin = () => {
             //* LOGIN FUNCTION HERE *//
             axios.post("admin/adminLogin", data).then((response) => {
               
-              console.log(response.data.adminResult);
+             
               const admin=response.data.adminResult
-              console.log(admin)
               if (!admin.Status) {
               console.log('okkkkkk')
                 toast(user.message );
