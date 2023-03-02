@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Datepicker } from "@mobiscroll/react";
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+import { useNavigate } from "react-router-dom";
 
 function DoctorsList({ doc }) {
+  const navigate =useNavigate()
   const [open, setOpen] = useState(false);
   const [myValue, setMyValue] = useState(null);
   const myChange = (ev) => {
     setMyValue(ev.value);
   };
+  console.log(myValue);
 
   return (
     <div className="p-10 flex flex-col sm:flex sm:flex-row justify-between border-b-4  border-gray-200">
@@ -21,24 +24,20 @@ function DoctorsList({ doc }) {
       </div>
       <div className=" m-4 flex flex-col">
         <button
-          onClick={(e) => setOpen(true)}
+        onClick={()=>navigate('/appoinment',{state:{id:doc._id}})}
           className="m-3 p-2 text-xs font-medium  tracking-wider text-white bg-green-600 rounded-lg  cursor-pointer hover:bg-opacity-80"
         >
           Book appoinment
         </button>
         <button
-          onClick={(e) => setOpen(false)}
+     
           className="m-3 p-2 text-xs font-medium  tracking-wider text-white bg-green-600 rounded-lg  cursor-pointer hover:bg-opacity-80"
         >
           {" "}
           view profile
         </button>
       </div>
-      {open ? (
-        <div>
-        <Datepicker value={myValue} onChange={myChange}/>
-        </div>
-      ) : null}
+      
     </div>
   );
 }

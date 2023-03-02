@@ -10,7 +10,7 @@ function Docters() {
   useEffect(() => {
     axios.get("/admin/doctors").then((res) => {
       setDoctors(res.data.doctor);
-      console.log(res.data.doctor);
+      console.log(res.data.doctor,'=========================');
     });
   }, [refresh === 0]);
 
@@ -48,7 +48,7 @@ function Docters() {
       </div>
       <div className="flex">
         <div className="w-full md:w-2/3 h-full flex flex-col">
-          {doctors.map((doc) => {
+          {doctors?.map((doc) => {
             return (
               <DoctorsList doc={doc}/>
             );
