@@ -5,46 +5,55 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import moment from "moment";
 import axios from "../../../axios/axios";
 import { useLocation } from "react-router-dom";
+import Modal from '../Modal'
 function Appoinment() {
-  const location=useLocation()
- const id =location.state.id
+  const location = useLocation();
+  const id = location.state.id;
+  const [modalOn, setModalOn] = useState(false);
+
 
   const [time, setTime] = useState([]);
+  const [selectedTime,setselectedTime]=useState([])
   const [myValue, setMyValue] = useState(null);
   const [day, setDay] = useState(null);
   const [refresh, setRefresh] = useState(false);
-  const[doctor,setDoctor]=useState([])
+  const [doctor, setDoctor] = useState([]);
+  const[date,setDate]=useState('')
 
+  const clicked = (time) => {
+    setModalOn(true)
+    setselectedTime(time)
+  }
   const myChange = (ev) => {
     const date = moment(ev.value);
+    const selectedDate=date.format("MMM Do YYYY");
+    setDate(selectedDate)
     const dayOfWeek = date.format("dddd");
     setMyValue(ev.value);
     setDay(dayOfWeek);
     setRefresh(!refresh);
   };
- 
-  useEffect(()=>{
-    axios.get(`/findDoctor?id=${id}`).then((res)=>{
-      setDoctor(res.data.doctor)
-    })
-  },[])
-  
-  console.log(doctor,'>>>>>>>>>>>>>>>>');
-    
+
+
+  useEffect(() => {
+    axios.get(`/findDoctor?id=${id}`).then((res) => {
+      setDoctor(res.data.doctor);
+    });
+  }, []);
+
+
+
   useEffect(() => {
     axios.get(`/viewappoinment?id=${id}&day=${day}`).then((res) => {
-
       if (res.data.time) {
         setTime(res.data.time);
       }
     });
   }, [refresh]);
 
-
-
   return (
     <>
-      <div class="p-32">
+      <div class="md:p-32">
         <div class="p-8 bg-gray-200 shadow-xl mt-24">
           <div class="grid grid-cols-1 ">
             <div class="relative">
@@ -55,7 +64,8 @@ function Appoinment() {
           </div>
           <div class="mt-40 text-center border-b pb-12">
             <h1 class="text-4xl font-medium text-gray-700">
-             {doctor.firstName} {doctor.lastName} <span class="font-light text-gray-500">27</span>
+              {doctor.firstName} {doctor.lastName}{" "}
+              <span class="font-light text-gray-500">27</span>
             </h1>
             <p class="font-light text-gray-600 mt-3">{doctor.location}</p>
             <p class="mt-8 text-gray-500">
@@ -77,13 +87,18 @@ function Appoinment() {
             <div className="flex  justify-center">
               {time.length ? (
                 time.map((time) => (
-                  <button className="mx-3 p-1 bg-red-200 border-red-300	 border-2 ">
-                    {time.start} To {time.end }
+                  <button
+                    onClick={() => clicked(time)}
+                    className="mx-3 p-1 bg-green-200 border-green-300	 border-2 "
+                  >
+                    {time.start} To {time.end}
                   </button>
                 ))
               ) : (
                 <span>Booking not availabe</span>
               )}
+                       {modalOn && < Modal date={date} setModalOn={setModalOn} time={selectedTime} doctor={doctor} />}
+
             </div>
           </div>
         </div>

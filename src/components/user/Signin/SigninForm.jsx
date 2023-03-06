@@ -88,6 +88,7 @@ export default function SigninForm() {
                 setLogin({
                   user: "user",
                   name: user.name,
+                  id:user.id,
                   token: user.token,
                 })
               );

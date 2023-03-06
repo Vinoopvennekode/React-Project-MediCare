@@ -7,6 +7,7 @@ import Home from '../Pages/Docter/DocterHome'
 import Signin from '../Pages/Docter/Signin'
 import Schedule from '../Pages/Docter/ScheduleTime'
 import Calender from '../Pages/Docter/calender'
+import Appoinments from "../Pages/Docter/Appoinments";
 function Admin() {
   return (
     <>
@@ -18,6 +19,7 @@ function Admin() {
         <Route path="/signin" element={<Signin/>} />
         <Route path="/schedule" element={<Schedule/>} />
         <Route path="/calender" element={<Calender/>} />
+        <Route path="/appoinments" element={<Appoinments/>} />
 
 
 
