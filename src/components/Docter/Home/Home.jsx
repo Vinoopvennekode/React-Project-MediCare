@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const arr = [{name:"Appoinment -pending",des:"select for approving appoinmnet"},{name:"scheduled Appoinment",des:"your Scheduled appoinments Here"},{name:"Appoinment History",des:"Click here for apinment history"},{name:"Upcoming"}];
+  const navigate=useNavigate()
+  const arr = [{name:"Appoinment -pending",des:"select for approving appoinmnet",url:'/docter/appoinments'},{name:"scheduled Appoinment",des:"your Scheduled appoinments Here",url:'/docter/schedule'},{name:"Appoinment History",des:"Click here for apinment history"},{name:"Upcoming"}];
   return (
     <>
       <div className="mt-6">
@@ -21,7 +23,7 @@ function Home() {
             {arr.map((app) => {
               return (
                 <div>
-                  <div className="card mx-9 cursor-pointer  bg-gray-300 w-[200px] h-[300px] m-2 rounded-lg shadow-lg ">
+                  <div onClick={()=>navigate(app.url)} className="card mx-9 cursor-pointer  bg-gray-300 w-[200px] h-[300px] m-2 rounded-lg shadow-lg ">
                     <div className="top">
                       <img
                         className="w-[200px] h-[200px] object-cover  p-2"

@@ -18,7 +18,7 @@ import axios from "../../../axios/axios";
 import swal from "sweetalert";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import OtpFrom from '../otp/otpForm'
 function Copyright(props) {
   return (
     <Typography
@@ -60,7 +60,8 @@ export default function SigninForm() {
   const [confpassword, setConfPassword] = useState(false);
   const [confpasswordError, setConfPasswordError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
-
+  const [otp, setOtp] = useState(false);
+  console.log(otp,'hello');
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -154,6 +155,12 @@ export default function SigninForm() {
     //   });
     // };
   };
+
+
+
+  const modalOn=()=>{
+    setOtp(true)
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -172,7 +179,8 @@ export default function SigninForm() {
             Sign Up
           </Typography>
           <ToastContainer />
-
+          <button onClick={modalOn}>OTP</button>
+          {otp&&<OtpFrom/>}
           <Box
             component="form"
             onSubmit={handleSubmit}

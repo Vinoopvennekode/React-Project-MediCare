@@ -4,6 +4,8 @@ import "react-calendar/dist/Calendar.css";
 import axios from "../../../axios/axios";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import Modal from "./Modal";
+import { all } from "axios";
 
 function Appoinments() {
   const [date, setDate] = useState(new Date());
@@ -11,7 +13,9 @@ function Appoinments() {
   const { id } = useSelector((state) => state.docterLogin);
   const [day, setDay] = useState(moment(date).format("dddd"));
   const [appoinments, setAppoinments] = useState([]);
-
+  const [modalOn, setModalOn] = useState(false);
+  const [appnmnt, SetAppnmnt] = useState([]);
+  const [allotedTime, setAllotedTime] = useState([]);
   console.log(date, "+++++", day);
   const onChange = (date) => {
     setDate(date);
@@ -43,10 +47,18 @@ function Appoinments() {
     };
     console.log(data, "///*/*/*/*/*/*");
     axios.post("/docter/getappoinments", data).then((res) => {
+      const allot = ([] = res.data.appoinments);
       setAppoinments(res.data.appoinments);
+      const exist = allot.filter((e) => e.status === "approved");
+      console.log(exist);
+      setAllotedTime(exist);
     });
   };
-  console.log(appoinments);
+
+  const open = (app) => {
+    setModalOn(true);
+    SetAppnmnt(app);
+  };
 
   return (
     <>
@@ -55,80 +67,115 @@ function Appoinments() {
           <div className="flex justify-between mb-3">
             <h1 class="text-xl mb-2">My Appoinments</h1>
           </div>
-          <div className="flex">
-
-          
-          <div class="overflow-auto w-full md:w-2/3 mx-16 rounded-lg shadow-md">
-            <table class="w-full">
-              <thead class="bg-gray-100 border-b-2 border-gray-200">
-                <tr>
-                  <th class="p-3 text-sm font-semibold tracking-wide text-left">
-                    Token
-                  </th>
-                  <th class="p-3 text-sm font-semibold tracking-wide text-left">
-                    Name
-                  </th>
-                  <th class="p-3 text-sm font-semibold tracking-wide text-left">
-                    Address
-                  </th>
-                  <th class="p-3 text-sm font-semibold tracking-wide text-left">
-                    Mobile
-                  </th>
-                  <th class="p-3 text-sm font-semibold tracking-wide text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-100">
-                {appoinments.map((app) => (
+          <div className="flex ">
+            <div class="overflow-auto w-full md:w-2/3 mx-16 rounded-lg shadow-md">
+              <table class="w-full">
+                <thead class="bg-gray-100 border-b-2 border-gray-200">
                   <tr>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap"></td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {app.user.name}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {app.user.email}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {app.user.phone}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {app.status}
-
-                    </td>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                      Token
+                    </th>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                      Name
+                    </th>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                      Address
+                    </th>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                      Mobile
+                    </th>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                      Status
+                    </th>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left"></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="flex md:w-1/3 flex-col">
-            <Calendar
-              onChange={onChange}
-              value={date}
-              tileDisabled={({ date }) =>
-                disabledDates.some(
-                  (disabledDate) =>
-                    disabledDate.getDate() === date.getDate() &&
-                    disabledDate.getMonth() === date.getMonth() &&
-                    disabledDate.getFullYear() === date.getFullYear()
-                )
-              }
-            />
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  {appoinments.map((app) => (
+                    <tr>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap"></td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {app.user.name}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {app.user.email}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {app.user.phone}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {app.status}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        <button
+                          onClick={() => open(app)}
+                          className="p-1 border border-black"
+                        >
+                          view
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {modalOn && <Modal setModalOn={setModalOn} app={appnmnt} />}
+            </div>
+            <div className="flex md:w-1/3 flex-col">
+              <Calendar
+                onChange={onChange}
+                value={date}
+                tileDisabled={({ date }) =>
+                  disabledDates.some(
+                    (disabledDate) =>
+                      disabledDate.getDate() === date.getDate() &&
+                      disabledDate.getMonth() === date.getMonth() &&
+                      disabledDate.getFullYear() === date.getFullYear()
+                  )
+                }
+              />
 
-            <form className="my-4" onSubmit={handleSubmit} action="">
-              <select className=" p-2 rounded-lg" name="TimeSlot" id="">
-                {timeSlot.map((time) => (
-                  <option value={time.start}>
-                    {time.start} To {time.end}
-                  </option>
-                ))}
-              </select>
-              <button
-                type="submit"
-                className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95"
-              >
-                submit
-              </button>
-            </form>
-          </div>
+              <form className="my-4" onSubmit={handleSubmit} action="">
+                <select className=" p-2 rounded-lg" name="TimeSlot" id="">
+                  {timeSlot.map((time) => (
+                    <option value={time.start}>
+                      {time.start} To {time.end}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="submit"
+                  className="p-2 mx-6 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95"
+                >
+                  submit
+                </button>
+              </form>
+              <table>
+                <thead className="bg-gray-100 border-b-2 border-gray-200">
+                  <tr>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                      Name
+                    </th>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                      alloted time
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allotedTime.map((e) => {
+                    return (
+                      <tr>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {e.user.name}
+                        </td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {e.allotedTime}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
