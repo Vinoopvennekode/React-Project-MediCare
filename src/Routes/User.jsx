@@ -5,10 +5,9 @@ import Signin from "../Pages/User/Signin";
 import DocterList from "../Pages/User/DocterList";
 import Docters from "../Pages/User/Docters";
 import Appoinment from "../Pages/User/Appoinment";
-
-import publicRouter from "../utils/publicRouter";  
-import protectRouter from "../utils/protectRouter";
-
+import Specialities from "../pages/User/Specialities"
+import Notifications from "../Pages/User/Notifications";
+import Payment from '../Pages/User/PaymentPage'
 function User() {
   return (
     <>
@@ -18,7 +17,10 @@ function User() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/docterList" element={<DocterList/>}/>
         <Route path="/docters" element={<Docters/>}/>
+        <Route path="/specialities" element={<Specialities/>}/>
+        <Route path="/notifications" element={<Notifications/>}/>
         <Route path="/appoinment" element={<Appoinment/>}/>
+        <Route path="/payment" element={<Payment/>}/>
       
       </Routes>
     </>

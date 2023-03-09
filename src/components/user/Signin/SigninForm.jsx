@@ -19,6 +19,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../../Store/Slice/UserLogin";
+import ForgotPassword from "./ForgotPassword";
+import OtpForgot from "./OtpForgot";
+import NewPassword from "./NewPassword";
 
 function Copyright(props) {
   return (
@@ -51,13 +54,22 @@ const theme = createTheme({
 
 export default function SigninForm() {
   const navigate = useNavigate();
+  const [otpForgot, setOtpForgot] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [newPassword, setNewPassword] = useState(false);
   const dispatch = useDispatch();
+  const [forgot, setForgot] = useState(false);
   const [email, setEmail] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
 
+
+
+
+  console.log(otpForgot,'qwerqwerqawerqewrqwerwerqerqw');
+  console.log(newPassword,'newwwwwwwwwwwwwwwwwpawssword');
   const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
@@ -88,7 +100,7 @@ export default function SigninForm() {
                 setLogin({
                   user: "user",
                   name: user.name,
-                  id:user.id,
+                  id: user.id,
                   token: user.token,
                 })
               );
@@ -107,6 +119,13 @@ export default function SigninForm() {
       setTotalRequired("All feilds are required");
     }
   };
+
+  const modalOn = () => {
+    console.log("haiii");
+    setForgot(true);
+    console.log(forgot);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -166,10 +185,7 @@ export default function SigninForm() {
               autoComplete="current-password"
               color="secondary"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
               type="submit"
               fullWidth
@@ -189,6 +205,7 @@ export default function SigninForm() {
                   "Don't have an account? Sign Up"
                 </Link>
               </Grid>
+
               <Grid item>
                 <Link
                   onClick={() => navigate("/docter/signup")}
@@ -201,6 +218,31 @@ export default function SigninForm() {
               </Grid>
             </Grid>
           </Box>
+          <Link
+            sx={{ ml: 8 }}
+            onClick={modalOn}
+            variant="body2"
+            component="button"
+          >
+            Forgot Password?
+          </Link>
+          {console.log(forgot)}
+          {forgot && (
+            <ForgotPassword
+              setForgot={setForgot}
+              setPhone={setPhone}
+              setOtpForgot={setOtpForgot}
+              
+            />
+          )}
+          {otpForgot && (
+            <OtpForgot
+              phone={phone}
+              setOtpForgot={setOtpForgot}
+              setNewPassword={setNewPassword}
+            />
+          )}
+          {newPassword && <NewPassword phone={phone} />}
         </Box>
       </Container>
     </ThemeProvider>

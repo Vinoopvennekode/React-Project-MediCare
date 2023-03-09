@@ -10,6 +10,7 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import { AddAPhoto } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -80,7 +81,13 @@ const Header = () => {
             </IconBox>
 
             {currentUser ? (
-              <div>
+              <div className="flex">
+                <div onClick={()=>navigate('/notifications')} class="relative mr-6 inline-flex w-fit cursor-pointer">
+                {/* <div class="absolute top-0 right-0 bottom-auto left-auto z-10 inline-block translate-x-2/4 -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-400 py-1 px-2 text-center align-baseline text-xs font-bold leading-none text-white">
+                  99+
+                </div> */}
+                <NotificationsIcon />
+              </div>
                 <UserBox onClick={(e) => setOpen(true)}>
                   <Avatar
                     sx={{ width: "30px", height: "30px" }}

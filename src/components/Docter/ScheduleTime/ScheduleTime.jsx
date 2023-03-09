@@ -8,13 +8,13 @@ import { useLocation } from "react-router-dom";
 const DoctorSchedule = () => {
   const location = useLocation();
   const myValue = location.state;
-  const { id } = useSelector((state) => state.docterLogin);
+  const { id,token } = useSelector((state) => state.docterLogin);
   const [date, setDate] = useState([]);
   const [app, setApp] = useState();
   const [time, setTime] = useState();
   const [refresh, setRefresh] = useState(false);
 
-
+console.log(token);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,13 +26,13 @@ const DoctorSchedule = () => {
       end: data.get("end"),
     };
     setDate(data);
-    axios.post("/docter/addAppoinment", { data: data, id: id }).then((res) => {
+    axios.post("/docter/addAppoinment", { data: data, id: id },{headers:{'Authorization':token}}).then((res) => {
       setRefresh(!refresh);
     });
   };
 
   useEffect(() => {
-    axios.post("/docter/viewappoinment", { data: id }).then((res) => {
+    axios.post("/docter/viewappoinment", { data: id },{headers:{'Authorization':token}}).then((res) => {
    
 console.log(res.data.app);
    
@@ -41,7 +41,7 @@ console.log(res.data.app);
   }, [refresh]);
 
   const deleteAppo = (data) => {
-   axios.delete(`/docter/deleteAppoinment?id=${data}&doctor=${id}`).then((res)=>{
+   axios.delete(`/docter/deleteAppoinment?id=${data}&doctor=${id}`,{headers:{'Authorization':token}}).then((res)=>{
 
     console.log(res.data,'heloooooooooooo');
 setApp(res.data)

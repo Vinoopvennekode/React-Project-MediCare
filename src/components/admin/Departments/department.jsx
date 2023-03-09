@@ -5,17 +5,20 @@ import Swal from 'sweetalert2';
 import { message } from 'antd';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
 
 
 
 function department() {
+  const { token } = useSelector((state) => state.adminLogin);
+
   const navigate=useNavigate()
   const location = useLocation();
   const [department, setDepartment] = useState([]);
   let data = location.state.id;
 
   useEffect(() => {
-    axios.post("/admin/singledepartment", { id: data }).then((res) => {
+    axios.post("/admin/singledepartment", { id: data },{headers:{'Authorization':token}}).then((res) => {
       console.log(res.data);
       setDepartment(res.data.department);
     });
@@ -36,7 +39,7 @@ function department() {
     }).then((result) => {
       if (result.isConfirmed) {
         // TODO: Implement delete logic
-        axios.delete(`/admin/deleteDepartment?id=${id}`).then((response) => {
+        axios.delete(`/admin/deleteDepartment?id=${id}`,{headers:{'Authorization':token}}).then((response) => {
             if(response.data.success){
                 console.log(response.data,"response");
                 toast(response.data.message)

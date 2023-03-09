@@ -60,8 +60,8 @@ export default function SigninForm() {
   const [confpassword, setConfPassword] = useState(false);
   const [confpasswordError, setConfPasswordError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
-  const [otp, setOtp] = useState(false);
-  console.log(otp,'hello');
+  const [otpToken, setOtpToken] = useState(null);
+  console.log(otpToken,'hello');
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -110,7 +110,7 @@ export default function SigninForm() {
                   setConfPasswordError("");
                   axios.post("/userSignup", data).then(async (response) => {
                     if (response.data.status === "success") {
-                      navigate("/signin");
+                      setOtpToken(response.data.userToken)
                     } else {
                       toast(response.data.message);
                     }
@@ -158,9 +158,6 @@ export default function SigninForm() {
 
 
 
-  const modalOn=()=>{
-    setOtp(true)
-  }
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -179,8 +176,8 @@ export default function SigninForm() {
             Sign Up
           </Typography>
           <ToastContainer />
-          <button onClick={modalOn}>OTP</button>
-          {otp&&<OtpFrom/>}
+        
+          {otpToken&&<OtpFrom otpToken={otpToken}/>}
           <Box
             component="form"
             onSubmit={handleSubmit}

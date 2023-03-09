@@ -1,14 +1,14 @@
-import React ,{useState,useEffect}from "react";
+import React, { useState, useEffect } from "react";
 import Card from "./Card";
-import axios from '../../../axios/axios'
+import axios from "../../../axios/axios";
 import { AddAPhoto } from "@mui/icons-material";
 
 const Carousel = () => {
-  const [departments,setDepartments]=useState([])
- 
+  const [departments, setDepartments] = useState([]);
+
   useEffect(() => {
     axios.get("/departments").then((res) => {
-        setDepartments(res.data.departments);
+      setDepartments(res.data.departments);
     });
   }, []);
 
@@ -22,12 +22,22 @@ const Carousel = () => {
     <>
       <div className="relative py-20">
         <div>
-          <div className=" p-4  text-xl ">
-            Book an appointment for an in-clinic consultation
-          </div>
+          <div className="flex justify-between">
+            <div>
+              <h3 className=" p-4  text-xl">
+                Book an appointment for an in-clinic consultation
+              </h3>
 
-          <div className="pl-4">
-            Find experienced doctors across all specialties
+              <h5 className="pl-4">
+                Find experienced doctors across all specialties
+              </h5>
+            </div>
+            <div className="mt-8">
+
+            <button className="mr-10 p-3 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
+              View all Specialities
+            </button>
+            </div>
           </div>
           {/* <div className="absolute right-0">
             <button

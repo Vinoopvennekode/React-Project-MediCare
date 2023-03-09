@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
 import Modal from '../Modal'
+import { useSelector } from "react-redux";
+
 function DocterPending() {
+  const { token } = useSelector((state) => state.adminLogin);
+
   const [modalOn, setModalOn] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [doctorsM, setDoctorsm] = useState([]);
@@ -17,14 +21,14 @@ function DocterPending() {
 
 
   useEffect(() => {
-    axios.get("/admin/pending").then((res) => {
+    axios.get("/admin/pending",{headers:{'Authorization':token}}).then((res) => {
       setDoctors(res.data.doctor);
     });
   }, [refresh]);
 
   const approve = (id) => {
     console.log(id, "unblock");
-    axios.patch("/admin/approve", { id }).then((response) => {
+    axios.patch("/admin/approve", { id },{headers:{'Authorization':token}}).then((response) => {
       if (response.data.success) {
         console.log(response.data);
         setRefresh(!refresh);

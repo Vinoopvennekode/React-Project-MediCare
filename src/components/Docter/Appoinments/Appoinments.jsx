@@ -8,9 +8,10 @@ import Modal from "./Modal";
 import { all } from "axios";
 
 function Appoinments() {
+  const { id,token } = useSelector((state) => state.docterLogin);
+
   const [date, setDate] = useState(new Date());
   const [timeSlot, setTimeSlot] = useState([]);
-  const { id } = useSelector((state) => state.docterLogin);
   const [day, setDay] = useState(moment(date).format("dddd"));
   const [appoinments, setAppoinments] = useState([]);
   const [modalOn, setModalOn] = useState(false);
@@ -24,7 +25,7 @@ function Appoinments() {
   };
 
   useEffect(() => {
-    axios.get(`docter/timeslots?id=${id}&day=${day}`).then((res) => {
+    axios.get(`docter/timeslots?id=${id}&day=${day}`,{headers:{'Authorization':token}}).then((res) => {
       console.log(res.data, "////--/-/-/-/-");
       if (res.data.time) {
         setTimeSlot(res.data.time);
@@ -46,7 +47,7 @@ function Appoinments() {
       timeStart: data.get("TimeSlot"),
     };
     console.log(data, "///*/*/*/*/*/*");
-    axios.post("/docter/getappoinments", data).then((res) => {
+    axios.post("/docter/getappoinments", data,{headers:{'Authorization':token}}).then((res) => {
       const allot = ([] = res.data.appoinments);
       setAppoinments(res.data.appoinments);
       const exist = allot.filter((e) => e.status === "approved");
@@ -118,7 +119,7 @@ function Appoinments() {
                   ))}
                 </tbody>
               </table>
-              {modalOn && <Modal setModalOn={setModalOn} app={appnmnt} />}
+              {modalOn && <Modal setModalOn={setModalOn} doctorId={id} date={date} app={appnmnt} />}
             </div>
             <div className="flex md:w-1/3 flex-col">
               <Calendar

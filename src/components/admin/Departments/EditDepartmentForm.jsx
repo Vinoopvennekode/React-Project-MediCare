@@ -6,8 +6,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase/firebase";
 import { message } from "antd";
+import { useSelector } from "react-redux";
 
 function EditdeptForm() {
+  const { token } = useSelector((state) => state.adminLogin);
+
   const location = useLocation();
   const [department, setDepartment] = useState([]);
   let data = location.state.id;
@@ -80,7 +83,7 @@ function EditdeptForm() {
           if (data.deptImg) {
             setDeptImg(false);
             setDeptImgError("");
-            axios.post("/admin/editDept", {data:data,id:department._id}).then((response) => {
+            axios.post("/admin/editDept", {data:data,id:department._id},{headers:{'Authorization':token}}).then((response) => {
               console.log(response.data);
               if (response.data.status) {
                 message.success("haiiiii");

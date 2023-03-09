@@ -20,6 +20,8 @@ function Register() {
   const [experienceError, setExperienceError] = useState("");
   const [location, setLocation] = useState(false);
   const [locationError, setLocationError] = useState("");
+  const [fees, setFees] = useState(false);
+  const [feesError, setFeesError] = useState("");
   const [gender, setGender] = useState(false);
   const [genderError, setGenderError] = useState("");
   const [doctorimg, setDoctorimg] = useState(false);
@@ -31,10 +33,12 @@ function Register() {
   const [totalRequired, setTotalRequired] = useState("");
 
   useEffect(() => {
-    axios.get("/admin/getdepartments").then((res) => {
+    axios.get("/departments").then((res) => {
       setDepartments(res.data.departments);
     });
   }, []);
+
+  console.log(department)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,6 +53,7 @@ function Register() {
       experience: data.get("experience"),
       gender: data.get("gender"),
       location: data.get("location"),
+      fees:data.get("fees"),
       doctorimg: data.get("doctorimg"),
       certificate: data.get("certificate"),
       address: data.get("address"),
@@ -111,6 +116,7 @@ function Register() {
       data.experience &&
       data.gender &&
       data.location &&
+      data.fees&&
       data.doctorimg &&
       data.certificate &&
       data.address
@@ -137,6 +143,9 @@ function Register() {
                 if (regName.test(data.location)) {
                   setLocation(false);
                   setLocationError("");
+                  if (data.fees) {
+                    setFees(false);
+                    setFeesError("");
                   if (data.doctorimg) {
                     setDoctorimg(false);
                     setDoctorimgError("");
@@ -169,6 +178,10 @@ function Register() {
                     setDoctorimg(true);
                     setDoctorimgError(" upload image ");
                   }
+                } else {
+                  setFees(true);
+                  setFeesError(" enter fees ");
+                }
                 } else {
                   setLocation(true);
                   setLocationError(" enter location ");
@@ -253,7 +266,7 @@ function Register() {
                   class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   name="department"
                 >
-                  {departments.map((dep) => (
+                  {departments?.map((dep) => (
                     <option key={dep._id}>{dep.name}</option>
                   ))}
                 </select>
@@ -293,6 +306,23 @@ function Register() {
                   required
                 />
                 <p class="text-red-500 text-xs italic">{locationError}</p>
+              </div>
+              <div>
+                <label
+                  for="fees"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Fees
+                </label>
+                <input
+                  type="text"
+                  id="fees"
+                  name="fees"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder=""
+                  required
+                />
+                <p class="text-red-500 text-xs italic">{feesError}</p>
               </div>
             </div>
             <div class="mb-6">

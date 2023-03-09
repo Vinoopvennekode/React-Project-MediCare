@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
 import { useNavigate } from "react-router-dom";
 import { Dna } from  'react-loader-spinner'
+import { useSelector } from "react-redux";
 
 function Departments() {
+  const { token } = useSelector((state) => state.adminLogin);
+
   const [departments,setDepartments] = useState([]);
   const [refresh, setRefresh] = useState(false);
   
   const navigate=useNavigate()
 
   useEffect(() => {
-    axios.get("/admin/getdepartments").then((res) => {
+    axios.get("/admin/getdepartments",{headers:{'Authorization':token}}).then((res) => {
         setDepartments(res.data.departments);
     
     });

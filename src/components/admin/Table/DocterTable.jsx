@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function DocterTable() {
+  const { token } = useSelector((state) => state.adminLogin);
+  
   const [doctors, setDoctors] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const navigate=useNavigate()
   const adminToken=localStorage.getItem('admintoken')
   console.log(adminToken);
   useEffect(() => {
-    axios.get("/admin/doctors",{headers:{'Authorization':adminToken}}).then((res) => {
+    axios.get("/admin/doctors",{headers:{'Authorization':token}}).then((res) => {
    console.log(res.data);
       setDoctors(res.data.doctor);
     }).catch((error)=>{
@@ -19,7 +22,7 @@ function DocterTable() {
 
   
   const blockDoctor = (id) => {
-    axios.patch("/admin/blockDoctor",{id}).then((res) => {
+    axios.patch("/admin/blockDoctor",{id},{headers:{'Authorization':token}}).then((res) => {
       if (res.data.success) {
         console.log(res.data);
         setRefresh(!refresh)
@@ -32,7 +35,7 @@ function DocterTable() {
 
   const unblocDoctor = (id) => {
     console.log(id, "unblock");
-    axios.patch("/admin/unblockDoctor", { id }).then((response) => {
+    axios.patch("/admin/unblockDoctor", { id }),{headers:{'Authorization':token}}.then((response) => {
       if (response.data.success) { 
         console.log(response.data);
         setRefresh(!refresh)

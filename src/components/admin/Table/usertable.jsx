@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
+import { useSelector } from "react-redux";
 
 function table() {
   const [users, setUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
-
+  const { token } = useSelector((state) => state.adminLogin);
+console.log(token,'admin token');
   useEffect(() => {
-    axios.get("/admin/users").then((res) => {
+    axios.get("/admin/users",{headers:{'Authorization':token}}).then((res) => {
       setUsers(res.data.users);
     });
   }, [refresh]);
 
   const blockUser = (id) => {
-    axios.patch("/admin/blockUser", { id }).then((res) => {
+    axios.patch("/admin/blockUser", { id },{headers:{'Authorization':token}}).then((res) => {
       if (res.data.success) {
         console.log(res.data);
         setRefresh(!refresh)
@@ -25,7 +27,7 @@ function table() {
 
   const unblockUser = (id) => {
     console.log(id, "unblock");
-    axios.patch("/admin/unblockUser", { id }).then((response) => {
+    axios.patch("/admin/unblockUser", { id },{headers:{'Authorization':token}}).then((response) => {
       if (response.data.success) {
         console.log(response.data);
         setRefresh(!refresh)
