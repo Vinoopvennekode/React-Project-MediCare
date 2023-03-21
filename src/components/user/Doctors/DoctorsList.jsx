@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Datepicker } from "@mobiscroll/react";
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { useNavigate } from "react-router-dom";
-
 function DoctorsList({ doc }) {
   const navigate =useNavigate()
   const [open, setOpen] = useState(false);
@@ -20,6 +19,8 @@ function DoctorsList({ doc }) {
           <h1 className="text-xl">{doc.firstName}</h1>
           <p className="text-sm">{doc.department}</p>
           <p className="text-sm">{doc.location}</p>
+          <p className="text-sm">Rs.{doc.fees}</p>
+
         </div>
       </div>
       <div className=" m-4 flex flex-col">

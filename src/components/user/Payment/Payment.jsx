@@ -1,7 +1,11 @@
 import React from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Payment() {
+  const Navigate =useNavigate()
+  const{name}=useSelector((state)=>state.userLogin)
     
     const initialOptions = {
         "client-id": "test",
@@ -23,7 +27,7 @@ function Payment() {
                         purchase_units: [
                             {
                                 amount: {
-                                    value: "10",
+                                    value: "700",
                                 },
                             },
                         ],
@@ -31,8 +35,9 @@ function Payment() {
                 }}
                 onApprove={(data, actions) => {
                     return actions.order.capture().then((details) => {
-                        const name = details.payer.name.given_name;
+                        
                         alert(`Transaction completed by ${name}`);
+                        Navigate('/')
                     });
                 }}
             />

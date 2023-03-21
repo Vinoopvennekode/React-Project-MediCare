@@ -1,6 +1,6 @@
 import React from "react";
 
-function DocterProfile() {
+function DoctorProfile() {
   return (
     <>
       <div className="m-10">
@@ -10,4 +10,4 @@ function DocterProfile() {
   );
 }
 
-export default DocterProfile;
+export default DoctorProfile;

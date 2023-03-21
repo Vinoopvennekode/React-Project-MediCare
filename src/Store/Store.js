@@ -12,11 +12,12 @@ import {
 import storage from "redux-persist/lib/storage";
 import { AdminLoginSlice } from "./Slice/AdminLogin";
 import { userLoginSlice } from "./Slice/UserLogin";
-import { DocterLoginSlice } from "./Slice/DocterLogin";
-
+import { DoctorLoginSlice } from "./Slice/DoctorLogin";
+import { userBlockSlice } from "./Slice/UserBlock";
 const persistConfig = { key: "root", storage, version: 1 };
 const persistConfiguser = { key: "user", storage, version: 1 };   
 const persistConfigdoctor = { key: "doctor", storage, version: 1 };   
+const persistConfiguserBlock = { key: "block", storage, version: 1 };   
 
 
 
@@ -30,16 +31,21 @@ const AdminLoginPersisteReducer = persistReducer(
   AdminLoginSlice.reducer
 );
 
-const DocterLoginPersistReducer = persistReducer(
+const DoctorLoginPersistReducer = persistReducer(
   persistConfigdoctor,
-  DocterLoginSlice.reducer
+  DoctorLoginSlice.reducer
+); 
+const userBlockPersistReducer = persistReducer(
+  persistConfiguserBlock,
+  userBlockSlice.reducer
 ); 
 
 export const store = configureStore({
   reducer: {
     userLogin: userLoginPersistedReducer,
     adminLogin: AdminLoginPersisteReducer,
-    docterLogin: DocterLoginPersistReducer,
+    doctorLogin: DoctorLoginPersistReducer,
+    userBlock:userBlockPersistReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 function calender() {
   const navigate = useNavigate();
-const { id } = useSelector((state) => state.docterLogin);
+const { id } = useSelector((state) => state.doctorLogin);
   
   const [myValue, setMyValue] = useState("");
 
@@ -16,7 +16,7 @@ const { id } = useSelector((state) => state.docterLogin);
     setMyValue(ev.value);
   };
   const handleCellClick = () => {
-    navigate("/docter/schedule", { state: { myValue: myValue } });
+    navigate("/doctor/schedule", { state: { myValue: myValue } });
   };
 
   const handleSubmit = (e) => {
@@ -27,7 +27,7 @@ const { id } = useSelector((state) => state.docterLogin);
       end: data.get("end"),
     };
     console.log(data);
-  axios.post('/docter/leaveDays', { data: data, id: id }).then((res)=>{
+  axios.post('/doctor/leaveDays', { data: data, id: id }).then((res)=>{
     console.log(res.data);
   })
     

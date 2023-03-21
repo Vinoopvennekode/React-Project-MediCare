@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 function Notification() {
   const navigate = useNavigate();
-  const { id } = useSelector((state) => state.userLogin);
+  const { id ,token} = useSelector((state) => state.userLogin);
 console.log(id);
   const [notification, setNotification] = useState([]);
   const [seenNotification, setseenNotification] = useState([]);
@@ -16,7 +16,7 @@ console.log(id);
 
   useEffect(() => {
     console.log('helllooo');
-    axios.post(`/getAllNotifications`,{id}).then((response) => {
+    axios.post(`/getAllNotifications`,{id},{headers:{'Authorization':token}}).then((response) => {
       const result = response.data;
       console.log(result);
       if (result.success) {
@@ -30,7 +30,7 @@ console.log(id);
 
   const handleMarkAllRead = () => {
     try {
-      axios.patch("/notificationMarkAllRead", {id}).then((response) => {
+      axios.patch("/notificationMarkAllRead", {id},{headers:{'Authorization':token}}).then((response) => {
         if (response.data.success) {
           message.success(response.data.message);
           setRefresh(!refresh);
@@ -46,7 +46,7 @@ console.log(id);
 
   const handleDeleteAllRead = () => {
     try {
-      axios.patch("/notificationDeleteAllRead", {id}).then((response) => {
+      axios.patch("/notificationDeleteAllRead", {id},{headers:{'Authorization':token}}).then((response) => {
         if (response.data.success) {
           message.success(response.data.message);
           setRefresh(!refresh);

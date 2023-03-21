@@ -1,41 +1,138 @@
 import React, { useState } from "react";
-import CloseIcon from '@mui/icons-material/Close';
-import axios from '../../axios/axios'
+import CloseIcon from "@mui/icons-material/Close";
+import axios from "../../axios/axios";
 import { useSelector } from "react-redux";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebase/firebase";
+import { ColorRing, Dna } from "react-loader-spinner";
+import{message }from 'antd'
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+
 
 const Modal = ({ date, setModalOn, doctor, time }) => {
+  const Navigate = useNavigate();
+
+  const [name, setName] = useState(false);
+  const [nameError, setNameError] = useState("");
+  const [age, setAge] = useState(false);
+  const [ageError, setAgeError] = useState("");
+  const [symptoms, setSymptoms] = useState(false);
+  const [symptomsError, setSymptomsError] = useState("");
+  const [document, setDocument] = useState(false);
+  const [documentError, setDocumentError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [open, setOpen] = useState(false);
-const {id}=useSelector((state) => state.userLogin)
-console.log(doctor._id,'++++++++++++++++++++++++++++++++++++');
+  const { id, token } = useSelector((state) => state.userLogin);
+  console.log(doctor._id, "++++++++++++++++++++++++++++++++++++");
   const handleCancelClick = () => {
     setModalOn(false);
   };
-  const handleSubmit=(e)=>{
-    e.preventDefault()
-    let data=new FormData(e.currentTarget);
-   
-    data={
-     doctor:doctor._id,
-     user:id,
-      age:data.get("age"),
-      symptoms:data.get("symptoms"),
-      date:date,
-      time:time
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let data = new FormData(e.currentTarget);
+
+    data = {
+      doctor: doctor._id,
+      user: id,
+      name: data.get("name"),
+      age: data.get("age"),
+      symptoms: data.get("symptoms"),
+      date: date,
+      time: time,
+      document: data.get("document"),
+    };
+    if (data.document.name) {
+      const dirs = Date.now();
+      const rand = Math.random();
+      const image = data.document;
+      const imageRef = ref(
+        storage,
+        `/doctorImages/${dirs}${rand}_${image?.name}`
+      );
+      const toBase64 = (image) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(image);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = (error) => reject(error);
+        }).catch((err) => {
+          console.log(err);
+        });
+      const imgBase = toBase64(image);
+      uploadString(imageRef, imgBase, "data_url").then(async () => {
+        const downloadURL = getDownloadURL(imageRef);
+        data.document = downloadURL;
+      });
+    } else {
+      data.document = "";
     }
-    axios.post('/postAppointment',data).then((res)=>{
-      console.log(res.data);
-    })
-  }
+
+    const regName = /^[a-zA-Z]+$/;
+    if (regName.test(data.name)) {
+      setName(false);
+      setNameError("");
+      if (data.age > 0) {
+        setAge(false);
+        setAgeError("");
+        if (data.symptoms) {
+          setSymptoms(false);
+          setSymptomsError("");
+         
+
+
+          Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Book appoinment!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              axios
+              .post("/postAppointment", data, {
+                headers: { Authorization: token },
+              })
+              .then((res) => {
+               message.error(res.data.message)
+                console.log(res.data);
+               
+              });
+              Swal.fire(
+                'Appoinment Booked',
+                'Your can check your notification for payment.',
+                'success'
+              )
+              Navigate('/')
+            }
+          })
+            
+          
+        } else {
+          setSymptoms(true);
+          setSymptomsError("Please Enter Symptoms");
+        }
+      } else {
+        setAge(true);
+        setAgeError("Please Enter valid Age");
+      }
+    } else {
+      setName(true);
+      setNameError("Please Enter valid Name");
+    }
+  };
 
   return (
     <div className=" p-10 bg-gray-100 rounded-lg overflow-auto shadow-xl transform transition-all opacity-90 fixed inset-0 z-50  ">
       <div className=" flex h-screen justify-center items-center ">
         <div className="flex-col justify-center  bg-green-500 py-12 px-10 ">
-        <div className="flex relative justify-end ">
-            <button
-              onClick={handleCancelClick}
-              className=" "
-            > <CloseIcon/>
+          <div className="flex relative justify-end ">
+            <button onClick={handleCancelClick} className=" ">
+              {" "}
+              <CloseIcon />
             </button>
           </div>
           <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto">
@@ -53,8 +150,10 @@ console.log(doctor._id,'++++++++++++++++++++++++++++++++++++');
                     id="name"
                     type="text"
                     name="name"
-                    required
+                    
                   />
+                  <p class="text-red-500 text-xs italic">{nameError}</p>
+
                 </div>
               </div>
               <div className=" mx-3 mb-6">
@@ -70,8 +169,10 @@ console.log(doctor._id,'++++++++++++++++++++++++++++++++++++');
                     id="age"
                     type="number"
                     name="age"
-                    required
+                    
                   />
+                  <p class="text-red-500 text-xs italic">{ageError}</p>
+
                 </div>
               </div>
               <div className=" mx-3 mb-6">
@@ -86,8 +187,10 @@ console.log(doctor._id,'++++++++++++++++++++++++++++++++++++');
                     className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                     id="symptoms"
                     name="symptoms"
-                    required
+                    
                   ></textarea>
+                  <p class="text-red-500 text-xs italic">{symptomsError}</p>
+
                 </div>
               </div>
               <div className=" mx-3 mb-6">
@@ -100,7 +203,8 @@ console.log(doctor._id,'++++++++++++++++++++++++++++++++++++');
                   </label>
                   <input
                     className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                    id="documents"
+                    id="document"
+                    name="document"
                     type="file"
                     multiple
                   />
@@ -145,8 +249,22 @@ console.log(doctor._id,'++++++++++++++++++++++++++++++++++++');
               as a notification."
             </span>
           </form>
-
-          
+          {loading && (
+          <div className=" p-10 bg-gray-100 rounded-lg overflow-auto shadow-xl transform transition-all opacity-70 fixed inset-0 z-50  ">
+            <div className=" flex h-screen justify-center items-center ">
+              <div className="flex-col justify-center   py-12 px-10 ">
+                <Dna
+                  visible={true}
+                  height="160"
+                  width="160"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              </div>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </div>

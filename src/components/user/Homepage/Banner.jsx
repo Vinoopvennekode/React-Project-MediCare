@@ -25,11 +25,11 @@ const Banner = () => {
             </Typography>
             <Button
               sx={{ marginTop: "20px" }}
-              onClick={() => navigate("/docters")}
+              onClick={() => navigate("/doctors")}
               color="success"
               variant="contained"
             >
-              Find docter
+              Find doctor
             </Button>
           </Box>
         </Grid>

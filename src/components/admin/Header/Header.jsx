@@ -56,21 +56,7 @@ const Header = () => {
   const { admin } = useSelector((state) => state.adminLogin);
 
   
-    useEffect(() => {
-      axios
-      .get("/admin/isAdmin", {
-        headers: { "a-access-token": localStorage.getItem("admintoken") },
-      })
-      .then((response) => {
-        console.log("welcome");
-        console.log(response.data);
-        if (!response.data.auth) {
-          navigate("/admin");
-        } else {
-          // dispatch(adminDetails(response.data));
-        }
-      });
-    }, []);
+ 
     
  
   const theme = useTheme();

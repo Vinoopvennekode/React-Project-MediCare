@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import SpecialityCard from "./SpecialityCard";
 import axios from "../../../axios/axios";
-
+import { useSelector } from "react-redux";
 function Specialities() {
+  const {token}=useSelector((state)=>state.userLogin)
   const [speciality, setSpeciality] = useState([]);
 
   useEffect(() => {

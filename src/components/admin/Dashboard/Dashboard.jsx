@@ -227,7 +227,7 @@ function AdminMain() {
                 >
                   <BusinessIcon />
                   <ListItemText sx={{ opacity: open ? 1 : 0, pl: 3 }}>
-                    Docters
+                    Doctors
                   </ListItemText>
                 </ListItemIcon>
               </ListItemButton>

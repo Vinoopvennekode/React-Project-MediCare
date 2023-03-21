@@ -1,9 +1,9 @@
 import React from "react";
 import Header from "../../components/user/Header/Header";
 
-import Banner from "../../components/user/Docters/Banner";
+import Banner from "../../components/user/Doctors/Banner";
 import Footer from "../../components/user/Footer/footer";
-const DocterList = () => {
+const DoctorList = () => {
   return (
     <>
       <Header />
@@ -13,4 +13,4 @@ const DocterList = () => {
   );
 };
 
-export default DocterList;
+export default DoctorList;

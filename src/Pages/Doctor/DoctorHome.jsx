@@ -5,24 +5,31 @@ import Footer from "../../components/user/Footer/footer";
 import axios from '../../axios/axios'
 import { useNavigate } from "react-router-dom";
 
-function DocterHome() {
+function DoctorHome() {
   const navigate = useNavigate();
   const [reload, setReload] = useState(false);
   useEffect(() => {
     const doctor = JSON.parse(localStorage.getItem("docToken"));
-    console.log(doctor.docterId);
+    console.log(doctor);
     axios
-      .get(`/docter/statusChecking?id=${doctor.docterId}`)
+      .get(`/doctor/statusChecking?id=${doctor}`)
       .then((response) => {
         const result = response.data;
-        
+        console.log(result.doctor.id);
+        const reason=result.doctor.rejectReason
+      
         if (result.doctorStatus === "register") {
           navigate("/doctor/register");
           setReload(!reload);
         }
         if (result.doctorStatus === "pending") {
-          navigate("/docter/approval");
+          navigate("/doctor/approval");
           setReload(!reload);
+        }
+        if(result.doctorStatus=== "reject"){
+          navigate(`/doctor/reject`,{state:{reason:reason}});
+          setReload(!reload);
+
         }
       });
   }, [reload]);
@@ -35,4 +42,4 @@ function DocterHome() {
   );
 }
 
-export default DocterHome;
+export default DoctorHome;

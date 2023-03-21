@@ -3,9 +3,9 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 
-import Table from "../Table/DocterTable";
+import Table from "../Table/DoctorsPending";
 
-function Docters() {
+function DoctorsPending() {
   const theme = useTheme();
 
   return (
@@ -27,4 +27,4 @@ function Docters() {
   );
 }
 
-export default Docters;
+export default DoctorsPending;

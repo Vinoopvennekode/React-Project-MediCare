@@ -3,20 +3,14 @@ import axios from "../../../axios/axios";
 import { Formik, useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 
-const validate = (values) => {
-  const errors = {};
-  if (Object.values(values.otp).some((data) => data === "")) {
-    errors.otp = "this field is required";
-  }
-  return errors;
-};
-
-function otpForm({ otpToken }) {
-  const navigate=useNavigate()
+function otpForm({otpToken}) {
+  const Navigate = useNavigate();
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(30);
-const [currentOtp,setCurrrentOtp]=useState('')
-const[load,setLoad]=useState(false)
+  const [currentOtp, setCurrrentOtp] = useState("");
+  const [otp, setOtp] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const [required, setRequired] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,122 +33,65 @@ const[load,setLoad]=useState(false)
     };
   }, [seconds]);
 
-  console.log(currentOtp)
-
-
-
-  const formik = useFormik({
-    initialValues: {
-      otp: Array.from({ length: 6 }).fill(""),
-    },
-    validate,
-    onSubmit: (values) => {
-      const str = Object.values(values.otp).join();
-      const value = str.replace(/,/g, "");
-      axios.post('/otpverify',{data:value},{headers:{'Authorization':otpToken}}).then((res)=>{
-       if(res.data.status==="success"){
-        navigate('/signin')
-       }else{
-        console.log(false);
-       }
-      })
-    },
-  });
-
-
-
- 
-
-
-  const inputRef = useRef({});
-  const [otp, setOtp] = useState({
-    digitOne: "",
-    digitTwo: "",
-    digitThree: "",
-    digitFour: "",
-    digitFive: "",
-    digitSix: "",
-  });
-
-  useEffect(() => {
-    inputRef.current[0].focus();
-    inputRef.current[0].addEventListener("paste", pasteText);
-
-    return () => inputRef.current[0].removeEventListener("paste", pasteText);
-  }, []);
-
-  const pasteText = (event) => {
-    const pastedText = event.clipboardData.getData("text");
-    const fieldValues = {};
-    Object.keys(otp).forEach((keys, index) => {
-      fieldValues[keys] = pastedText[index];
-    });
-    setOtp(fieldValues);
-    inputRef.current[5].focus();
-  };
-
-  const handleChange = (event, index) => {
-    const { name, value } = event.target;
-
-    if (/[a-z]/gi.test(value)) return;
-
-    const currentOTP = { ...formik.values.otp };
-
-    currentOTP[index] = value.slice(-1);
-    formik.setValues((prev) => ({
-      ...prev,
-      otp: currentOTP,
-    }));
-    setOtp((prev) => ({
-      ...prev,
-      [name]: value.slice(-1),
-    }));
-
-    if (value && index < 5) {
-      inputRef.current[index + 1].focus();
-    }
-  };
-
-  const handleBackSpace = (event, index) => {
-    if (event.key === "Backspace") {
-      if (index > 0) {
-        inputRef.current[index - 1].focus();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let data = new FormData(e.currentTarget);
+    data = {
+      otp: data.get("otp"),
+    };
+    console.log(data);
+    if (data.otp) {
+      const regNumber = /^[0-9]+$/;
+      if (regNumber.test(data.otp)) {
+        console.log('1');
+        setOtp(false);
+        setOtpError("");
+        if (data.otp.length <= 6) {
+          console.log('2');
+          setOtp(false);
+          setOtpError("");
+console.log(data,otpToken);
+          axios
+            .post(
+              "/otpverify",
+              { data: data },
+              { headers: { Authorization: otpToken } }
+            )
+            .then((res) => {
+              console.log(res.data);
+              if (res.data.status === "success") {
+                Navigate("/signin");
+              } else {
+                console.log(false);
+              }
+            });
+        } else {
+          setOtp(true);
+          setOtpError("Please 6 digits");
+        }
+      } else {
+        setOtp(true);
+        setOtpError("Please enter Number only");
       }
+    } else {
+      setRequired("fill the otp");
     }
-  };
-
-  const renderInput = (keys) => {
-    return Object.keys(otp).map((value, index) => (
-      <input
-        key={index}
-        ref={(element) => (inputRef.current[index] = element)}
-        type="text"
-        value={otp[value]}
-        name={value}
-        className="w-16 h-12 rounded-md mr-3 text-center text-xl"
-        onChange={(event) => handleChange(event, index)}
-        onKeyUp={(event) => handleBackSpace(event, index)}
-      />
-    ));
   };
 
   return (
     <div className=" mt-10  bg-zinc-500 opacity-90 fixed inset-0 z-50  ">
       <div className="flex h-screen justify-center items-center ">
         <div className="flex justify-center  bg-green-300 py-12 px-10 ">
-          <form action="">
+          <form action="" onSubmit={handleSubmit}>
             <div className=" flex flex-col items-center ">
-              <h3 className="text-3xl mb-8"> Please fill the otp</h3>
-              <Formik>
-                <div>{renderInput()}</div>
-              </Formik>
-              {formik.errors.otp && <p>please fill the fields</p>}
+              <h3 className="text-2xl mb-8"> Please fill the otp</h3>
+              <input type="text" className="" id="otp" name="otp" />
+           
 
               {seconds > 0 || minutes > 0 ? (
                 <button
-                  type="button"
+                  type="submit"
                   className="mt-4 w-32 border border-solid border-black  p-1 rounded"
-                  onClick={formik.handleSubmit}
                 >
                   Submit
                 </button>

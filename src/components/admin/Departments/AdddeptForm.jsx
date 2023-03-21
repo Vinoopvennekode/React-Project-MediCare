@@ -7,11 +7,11 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase/firebase";
 import { message } from "antd";
 import { useSelector } from "react-redux";
-
+import { ColorRing, Dna } from "react-loader-spinner";
 
 function AdddeptForm() {
   const { token } = useSelector((state) => state.adminLogin);
- 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [name, setName] = useState(false);
   const [nameError, setNameError] = useState("");
@@ -23,6 +23,7 @@ function AdddeptForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     let data = new FormData(e.currentTarget);
     data = {
       name: data.get("name"),
@@ -30,34 +31,10 @@ function AdddeptForm() {
       deptImg: data.get("deptImg"),
     };
 
-    if (data.deptImg.name) {
-      const dirs = Date.now();
-      const rand = Math.random();
-      const image = data.deptImg;
-      const imageRef = ref(
-        storage,
-        `/doctordeptImg/${dirs}${rand}_${image?.name}`
-      );
-      const toBase64 = (image) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(image);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        }).catch((err) => {
-          console.log(err);
-        });
-      const imgBase = await toBase64(image);
-      await uploadString(imageRef, imgBase, "data_url").then(async () => {
-        const downloadURL = await getDownloadURL(imageRef);
-        data.deptImg = downloadURL;
-      });
-    } else {
-      data.deptImg = "";
-    }
-
     if (data.name && data.description && data.deptImg) {
-      if (data.name) {
+      const regName = /^[a-zA-Z]+$/;
+
+      if (regName.test(data.name)) {
         setName(false);
         setNameError("");
         if (data.description) {
@@ -66,29 +43,66 @@ function AdddeptForm() {
           if (data.deptImg) {
             setDeptImg(false);
             setDeptImgError("");
-            axios.post("/admin/speciality", data,{headers:{'Authorization':token}}).then((response) => {
-              console.log(response.data);
-              if (response.data.status) {
-                message.success('haiiiii')
-                navigate("/admin/departments");
-              } else {
-                
-                toast(response.data.message);
-              }
-            });
+            if (data.deptImg.name) {
+              const dirs = Date.now();
+              const rand = Math.random();
+              const image = data.deptImg;
+              const imageRef = ref(
+                storage,
+                `/doctordeptImg/${dirs}${rand}_${image?.name}`
+              );
+              const toBase64 = (image) =>
+                new Promise((resolve, reject) => {
+                  const reader = new FileReader();
+                  reader.readAsDataURL(image);
+                  reader.onload = () => resolve(reader.result);
+                  reader.onerror = (error) => reject(error);
+                }).catch((err) => {
+                  console.log(err);
+                });
+              const imgBase = await toBase64(image);
+              await uploadString(imageRef, imgBase, "data_url").then(
+                async () => {
+                  const downloadURL = await getDownloadURL(imageRef);
+                  data.deptImg = downloadURL;
+                }
+              );
+            } else {
+              data.deptImg = "";
+            }
+
+            axios
+              .post("/admin/speciality", data, {
+                headers: { Authorization: token },
+              })
+              .then((response) => {
+                console.log(response.data);
+                if (response.data.status) {
+                  setLoading(false)
+                  message.success("haiiiii");
+                  navigate("/admin/departments");
+                } else {
+                  setLoading(false)
+                  toast(response.data.message);
+                }
+              });
           } else {
+            setLoading(false)
             setDeptImg(true);
             setDeptImgError("Please upload image");
           }
         } else {
+          setLoading(false)
           setDescrption(true);
           setDescrptionError("Please enter description");
         }
       } else {
+        setLoading(false)
         setName(true);
-        setNameError("Please enter name");
+        setNameError("Please enter valid speciality name");
       }
     } else {
+      setLoading(false)
       setTotalRequired("All feilds are required");
     }
   };
@@ -96,7 +110,7 @@ function AdddeptForm() {
   return (
     <>
       <ToastContainer />
-  
+
       <div className="mt-9 flex justify-center">
         <div className="flex flex-col">
           <div className="mb-9">
@@ -163,6 +177,22 @@ function AdddeptForm() {
               Submit
             </button>
           </form>
+          {loading && (
+          <div className=" p-10 bg-gray-100 rounded-lg overflow-auto shadow-xl transform transition-all opacity-70 fixed inset-0 z-50  ">
+            <div className=" flex h-screen justify-center items-center ">
+              <div className="flex-col justify-center   py-12 px-10 ">
+                <Dna
+                  visible={true}
+                  height="160"
+                  width="160"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              </div>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </>

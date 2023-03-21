@@ -8,21 +8,21 @@ import {
 import Box from "@mui/material/Box";
 import Header from "../../components/admin/Header/Header";
 import Sidebar from "../../components/admin/Sidebar/Sidebar";
-import Doctorstable from "../../components/admin/Docters/Docters";
+import AppoinmentsTable from "../../components/admin/Appoinments/Appoinments";
 
 const mdTheme = createTheme();
 
 
-function Docters() {
+function Doctors() {
   return (
     <ThemeProvider theme={mdTheme}>
     <Box sx={{ display: "flex" }}>
       <Header />
       <Sidebar />
-      <Doctorstable />
+      <AppoinmentsTable />
     </Box>
   </ThemeProvider>
   )
 }
 
-export default Docters
+export default Doctors

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import axios from "../../../axios/axios";
 import { AddAPhoto } from "@mui/icons-material";
-
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Carousel = () => {
+  const Navigate=useNavigate()
   const [departments, setDepartments] = useState([]);
-
+const{token}=useSelector((state)=>state.userLogin)
   useEffect(() => {
     axios.get("/departments").then((res) => {
       setDepartments(res.data.departments);
@@ -34,7 +36,7 @@ const Carousel = () => {
             </div>
             <div className="mt-8">
 
-            <button className="mr-10 p-3 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
+            <button onClick={()=>Navigate('/specialities')} className="mr-10 p-3 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">
               View all Specialities
             </button>
             </div>

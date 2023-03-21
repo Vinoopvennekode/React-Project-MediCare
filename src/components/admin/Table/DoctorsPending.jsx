@@ -1,42 +1,63 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
-import Modal from '../Modal'
+import Modal from "../Modal";
+import RejectModal from "../RejectModal";
 import { useSelector } from "react-redux";
+import { message, Popconfirm } from "antd";
 
-function DocterPending() {
+function DoctorPending() {
   const { token } = useSelector((state) => state.adminLogin);
-
+  const [rejectModal, setRejectModal] = useState(false);
   const [modalOn, setModalOn] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [doctorsM, setDoctorsm] = useState([]);
+  const [id, setId] = useState("");
 
   const [refresh, setRefresh] = useState(false);
 
   const clicked = (doctor) => {
-    setModalOn(true)
-    setDoctorsm(doctor)
-  }
-  const [choice, setChoice] = useState(false)
-
-
+    setModalOn(true);
+    setDoctorsm(doctor);
+  };
+  const [choice, setChoice] = useState(false);
 
   useEffect(() => {
-    axios.get("/admin/pending",{headers:{'Authorization':token}}).then((res) => {
-      setDoctors(res.data.doctor);
-    });
+    axios
+      .get("/admin/pending", { headers: { Authorization: token } })
+      .then((res) => {
+        setDoctors(res.data.doctor);
+      });
   }, [refresh]);
 
-  const approve = (id) => {
-    console.log(id, "unblock");
-    axios.patch("/admin/approve", { id },{headers:{'Authorization':token}}).then((response) => {
-      if (response.data.success) {
-        console.log(response.data);
-        setRefresh(!refresh);
-      } else {
-        message.error(response.data.message);
-      }
-    });
+
+
+
+
+  const confirm = (e) => {
+    console.log(id);
+    axios
+      .patch("/admin/approve", { id }, { headers: { Authorization: token } })
+      .then((response) => {
+        if (response.data.success) {
+          console.log(response.data);
+          setRefresh(!refresh);
+        } else {
+          message.error(response.data.message);
+        }
+      });
+    message.success("Click on Yes");
   };
+
+  const cancel = (e) => {
+    console.log(e);
+    message.error("Click on No");
+  };
+
+  const rejectModalOn=(doctor)=>{
+    setDoctorsm(doctor)
+    setRejectModal(true)
+
+  }
 
   return (
     <>
@@ -60,6 +81,7 @@ function DocterPending() {
                 <th class="p-3 text-sm font-semibold tracking-wide text-left">
                   Mobile
                 </th>
+                <th class="p-3 text-sm font-semibold tracking-wide text-left"></th>
                 <th class="p-3 text-sm font-semibold tracking-wide text-left"></th>
                 <th class="p-3 text-sm font-semibold tracking-wide text-left"></th>
               </tr>
@@ -90,17 +112,50 @@ function DocterPending() {
                     </button>
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <button
-                      onClick={() => approve(doctor._id)}
+                    
+
+                    <Popconfirm
+                        title="Approve the Doctor"
+                        description="Are you sure to Approve the Doctor?"
+                        onConfirm={confirm}
+                        onCancel={cancel}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                       <button
+                      onClick={() => setId(doctor._id)}
                       className="p-2 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer uppercase hover:bg-opacity-95"
                     >
                       {" "}
                       approve
                     </button>
+                      </Popconfirm>
+                  </td>
+                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <button
+                      onClick={() => rejectModalOn(doctor)}
+                      className="p-2 text-xs font-medium  tracking-wider text-white bg-red-400 rounded-lg  cursor-pointer uppercase hover:bg-opacity-95"
+                    >
+                      {" "}
+                      Reject
+                    </button>
                   </td>
                 </tr>
               ))}
-          {modalOn && < Modal setModalOn={setModalOn} doctorsM={doctorsM} setChoice={setChoice} />}
+              {modalOn && (
+                <Modal
+                  setModalOn={setModalOn}
+                  doctorsM={doctorsM}
+                  setChoice={setChoice}
+                />
+              )}
+
+              {rejectModal&&<RejectModal 
+                  doctorsM={doctorsM}
+              setRejectModal={setRejectModal}
+              setRefresh={setRefresh}
+              refresh={refresh}
+              />}
             </tbody>
           </table>
         </div>
@@ -109,4 +164,4 @@ function DocterPending() {
   );
 }
 
-export default DocterPending;
+export default DoctorPending;

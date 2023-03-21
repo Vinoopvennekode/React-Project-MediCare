@@ -68,7 +68,7 @@ const Header = () => {
             </IconBox>
 
             <Button
-              onClick={() => navigate("/docter/signin")}
+              onClick={() => navigate("/doctor/signin")}
               variant="outlined"
             >
               Login/Signup

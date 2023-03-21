@@ -1,7 +1,7 @@
 import React ,{useState}from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../axios/axios";
-function NewPassword({ phone }) {
+function NewPassword({ phone,setNewPassword }) {
     const Navigate=useNavigate()
   const [password, setPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
@@ -31,6 +31,7 @@ function NewPassword({ phone }) {
           axios.post("/setNewPassword", data).then((res) => {
             console.log(res.data, "daaatahelloooeoeoeoeoeoeoeooeoeoe");
             if (res.data.status) {
+              setNewPassword(false)
               console.log("succus");
               Navigate('/signin')
             } else {

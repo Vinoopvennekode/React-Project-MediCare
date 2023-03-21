@@ -19,6 +19,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../../Store/Slice/UserLogin";
+import { setBlock } from "../../../Store/Slice/UserBlock";
 import ForgotPassword from "./ForgotPassword";
 import OtpForgot from "./OtpForgot";
 import NewPassword from "./NewPassword";
@@ -65,11 +66,8 @@ export default function SigninForm() {
   const [passwordError, setPasswordError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
 
-
-
-
-  console.log(otpForgot,'qwerqwerqawerqewrqwerwerqerqw');
-  console.log(newPassword,'newwwwwwwwwwwwwwwwwpawssword');
+  console.log(otpForgot, "qwerqwerqawerqewrqwerwerqerqw");
+  console.log(newPassword, "newwwwwwwwwwwwwwwwwpawssword");
   const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
@@ -91,7 +89,7 @@ export default function SigninForm() {
           axios.post("/userLogin", data).then((response) => {
             console.log(response.data.userLogin);
             const user = response.data.userLogin;
-            console.log(user.data);
+            console.log(user, "daaataaaaaa");
             if (!user.Status) {
               console.log("okkkkkk");
               toast(user.message);
@@ -102,6 +100,11 @@ export default function SigninForm() {
                   name: user.name,
                   id: user.id,
                   token: user.token,
+                })
+              );
+              dispatch(
+                setBlock({
+                  block: user.block,
                 })
               );
               navigate("/");
@@ -208,7 +211,7 @@ export default function SigninForm() {
 
               <Grid item>
                 <Link
-                  onClick={() => navigate("/docter/signup")}
+                  onClick={() => navigate("/doctor/signup")}
                   variant="body2"
                   color="inherit"
                   component="button"
@@ -232,7 +235,6 @@ export default function SigninForm() {
               setForgot={setForgot}
               setPhone={setPhone}
               setOtpForgot={setOtpForgot}
-              
             />
           )}
           {otpForgot && (
@@ -242,7 +244,9 @@ export default function SigninForm() {
               setNewPassword={setNewPassword}
             />
           )}
-          {newPassword && <NewPassword phone={phone} />}
+          {newPassword && (
+            <NewPassword phone={phone} setNewPassword={setNewPassword} />
+          )}
         </Box>
       </Container>
     </ThemeProvider>

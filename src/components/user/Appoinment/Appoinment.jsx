@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Datepicker } from "@mobiscroll/react";
 import { useSelector } from "react-redux";
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import axios from "../../../axios/axios";
 import { useLocation } from "react-router-dom";
 import Modal from '../Modal'
+
 function Appoinment() {
+  const {token}=useSelector((state)=>state.userLogin)
   const location = useLocation();
   const id = location.state.id;
   const [modalOn, setModalOn] = useState(false);
@@ -24,19 +28,22 @@ function Appoinment() {
     setModalOn(true)
     setselectedTime(time)
   }
-  const myChange = (ev) => {
-    const date = moment(ev.value);
+  const myChange = (dates) => {
+    const date = moment(dates);
+    console.log(date,'date');
     const selectedDate=date.format("MMM Do YYYY");
     setDate(selectedDate)
+    console.log(selectedDate,'selected date');
     const dayOfWeek = date.format("dddd");
-    setMyValue(ev.value);
+    console.log(dayOfWeek,'dayofweek');
+    setMyValue(dates);
     setDay(dayOfWeek);
     setRefresh(!refresh);
   };
 
 
   useEffect(() => {
-    axios.get(`/findDoctor?id=${id}`).then((res) => {
+    axios.get(`/findDoctor?id=${id}`,{headers:{'Authorization':token}}).then((res) => {
       setDoctor(res.data.doctor);
     });
   }, []);
@@ -44,7 +51,7 @@ function Appoinment() {
 
 
   useEffect(() => {
-    axios.get(`/viewappoinment?id=${id}&day=${day}`).then((res) => {
+    axios.get(`/viewappoinment?id=${id}&day=${day}`,{headers:{'Authorization':token}}).then((res) => {
       if (res.data.time) {
         setTime(res.data.time);
       }
@@ -71,17 +78,17 @@ function Appoinment() {
             <p class="mt-8 text-gray-500">
               {doctor.department}- {doctor.location}
             </p>
-            <p class="mt-2 text-gray-500">University of Computer Science</p>
+            {/* <p class="mt-2 text-gray-500">University of Computer Science</p> */}
           </div>
-          <div class="mt-12 flex flex-col justify-center items-center">
-            <p class="text-gray-600 text-center  my-4 font-light lg:px-16">
+          <div class=" flex flex-col justify-center items-center">
+            {/* <p class="text-gray-600 text-center  my-4 font-light lg:px-16">
               An artist of considerable range, Ryan — the name taken by
               Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs
               and records all of his own music, giving it a warm, intimate feel
               with a solid groove structure. An artist of considerable range.
-            </p>
-            <span>Choose Your Data</span>
-            <Datepicker value={myValue} onChange={myChange} />
+            </p> */}
+            <span>Choose Your Date</span>
+            <Calendar  minDate={new Date()} value={myValue} onChange={myChange} />
 
             <span className="my-6">Booking Here</span>
             <div className="flex  justify-center">
@@ -95,7 +102,7 @@ function Appoinment() {
                   </button>
                 ))
               ) : (
-                <span>Booking not availabe</span>
+                <span className="text-red-500">Booking not availabe</span>
               )}
                        {modalOn && < Modal date={date} setModalOn={setModalOn} time={selectedTime} doctor={doctor} />}
 

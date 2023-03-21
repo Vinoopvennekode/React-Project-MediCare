@@ -38,14 +38,12 @@ function Register() {
     });
   }, []);
 
-  console.log(department)
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const docter = JSON.parse(localStorage.getItem("docToken"));
-    console.log(docter.docterId);
+    const doctor = JSON.parse(localStorage.getItem("docToken"));
+    console.log(doctor, "ddoooocttooorr");
     let data = new FormData(e.currentTarget);
     data = {
       department: data.get("department"),
@@ -53,11 +51,11 @@ function Register() {
       experience: data.get("experience"),
       gender: data.get("gender"),
       location: data.get("location"),
-      fees:data.get("fees"),
+      fees: data.get("fees"),
       doctorimg: data.get("doctorimg"),
       certificate: data.get("certificate"),
       address: data.get("address"),
-      docterId: docter.docterId,
+      doctorId: doctor,
     };
     if (data.doctorimg.name) {
       const dirs = Date.now();
@@ -116,7 +114,7 @@ function Register() {
       data.experience &&
       data.gender &&
       data.location &&
-      data.fees&&
+      data.fees &&
       data.doctorimg &&
       data.certificate &&
       data.address
@@ -137,73 +135,95 @@ function Register() {
             if (regName.test(data.department)) {
               setDepartment(false);
               setDepartmentError("");
-              if (regPhone.test(data.experience)) {
+              if (data.experience>0) {
                 setExperience(false);
                 setExperienceError("");
                 if (regName.test(data.location)) {
                   setLocation(false);
                   setLocationError("");
-                  if (data.fees) {
+                  if (data.fees > 0) {
                     setFees(false);
                     setFeesError("");
-                  if (data.doctorimg) {
-                    setDoctorimg(false);
-                    setDoctorimgError("");
-                    if (data.certificate) {
-                      setCertificate(false);
-                      setCertificateError("");
+                    if (data.doctorimg) {
+                      setDoctorimg(false);
+                      setDoctorimgError("");
                       if (data.certificate) {
-                        setAddress(false);
-                        setAddressError("");
-                        axios
-                          .post("/docter/register", data)
-                          .then((response) => {
-                            console.log(response.data);
-                            if (response.data.message === "success") {
-                              setLoading(false);
-                              navigate("/docter/approval");
-                            } else {
-                              toast(response.data.message);
-                            }
-                          });
+                        setCertificate(false);
+                        setCertificateError("");
+                        if (data.address) {
+                          setAddress(false);
+                          setAddressError("");
+                          axios
+                            .post("/doctor/register", data)
+                            .then((response) => {
+                              console.log("haiii");
+                              console.log(response.data, "response");
+
+                              if (response.data.message === "success") {
+                                setLoading(false);
+                                navigate("/doctor/approval");
+                              } else {
+                                toast(response.data.message);
+                              }
+                            });
+                        } else {
+                          setAddress(true);
+                          setLoading(false);
+
+                          setAddressError(" enter address ");
+                        }
                       } else {
-                        setAddress(true);
-                        setAddressError(" enter address ");
+                        setCertificate(true);
+                        setLoading(false);
+
+                        setCertificateError(" upload image ");
                       }
                     } else {
-                      setCertificate(true);
-                      setCertificateError(" upload image ");
+                      setDoctorimg(true);
+                      setLoading(false);
+
+                      setDoctorimgError(" upload image ");
                     }
                   } else {
-                    setDoctorimg(true);
-                    setDoctorimgError(" upload image ");
+                    setFees(true);
+                    setLoading(false);
+
+                    setFeesError(" enter fees ");
                   }
                 } else {
-                  setFees(true);
-                  setFeesError(" enter fees ");
-                }
-                } else {
                   setLocation(true);
+                  setLoading(false);
+
                   setLocationError(" enter location ");
                 }
               } else {
                 setExperience(true);
+                setLoading(false);
+
                 setExperienceError(" enter expirience ");
               }
             } else {
               setDepartment(true);
+              setLoading(false);
+
               setDepartmentError(" enter department ");
             }
           } else {
             setGender(true);
+            setLoading(false);
+
             setGenderError(" enter valid gender ");
           }
         } else {
           setPhoneNumber(true);
+          setLoading(false);
+
           setPhoneNumberError("Please enter 10 digit");
         }
       } else {
         setPhoneNumber(true);
+        setLoading(false);
+
         setPhoneNumberError("Please Enter valid Phone no");
       }
     } else {
@@ -330,7 +350,7 @@ function Register() {
                 for="image"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Image
+                Image (only jpg/png/webp)
               </label>
               <input
                 type="file"
@@ -347,7 +367,7 @@ function Register() {
                 for="certificate"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Certificate
+                Certificate (only jpg/png/webp)
               </label>
               <input
                 type="file"
@@ -383,14 +403,20 @@ function Register() {
               Submit
             </button>
             {loading && (
-              <Dna
-                visible={true}
-                height="80"
-                width="80"
-                ariaLabel="dna-loading"
-                wrapperStyle={{}}
-                wrapperClass="dna-wrapper"
-              />
+              <div className=" p-10 bg-gray-100 rounded-lg overflow-auto shadow-xl transform transition-all opacity-70 fixed inset-0 z-50  ">
+                <div className=" flex h-screen justify-center items-center ">
+                  <div className="flex-col justify-center   py-12 px-10 ">
+                    <Dna
+                      visible={true}
+                      height="160"
+                      width="160"
+                      ariaLabel="dna-loading"
+                      wrapperStyle={{}}
+                      wrapperClass="dna-wrapper"
+                    />
+                  </div>
+                </div>
+              </div>
             )}
           </form>
         </div>

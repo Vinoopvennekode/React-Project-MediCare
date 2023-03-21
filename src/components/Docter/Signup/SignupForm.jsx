@@ -62,12 +62,12 @@ function SignupForm() {
                 setConfPassword(false);
                 setPasswordError("");
                 setConfPasswordError("");
-                axios.post("/docter/signup", data).then((response) => {
+                axios.post("/doctor/signup", data).then((response) => {
                  
                   if (response.data.status === "success") {
                     console.log(response.data)
                     localStorage.setItem('docToken',JSON.stringify(response.data))
-                    navigate("/docter/register");
+                    navigate("/doctor/register");
                   } else {
                     toast(response.data.message);
                   }
@@ -103,103 +103,90 @@ function SignupForm() {
   return (
     <>
     <ToastContainer/>
-      <div class="min-h-screen py-40">
-        <div class="container mx-auto">
-          <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
-            <div class="w-full lg:w-1/2 flex flex-col items-center justify-center p-12 bg-[#80ED99] bg-no-repeat bg-cover bg-center ">
-              <h1 class=" text-3xl mb-3">Welcome Doctor</h1>
+      <div className="min-h-screen py-40">
+        <div className="container mx-auto">
+          <div className="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
+            <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-12 bg-[#80ED99] bg-no-repeat bg-cover bg-center ">
+              <h1 className=" text-3xl mb-3">Welcome Doctor</h1>
               <div>
-                <p class="">
+                <p className="">
                  
-                  <a href="#" class="">
+                  <a href="#" className="">
                     Learn more about Medicare
                   </a>
                 </p>
               </div>
             </div>
-            <div class="w-full lg:w-1/2 py-16 px-12">
-              <h2 class="text-3xl mb-4">Signup</h2>
-              <p class="mb-4">
+            <div className="w-full lg:w-1/2 py-16 px-12">
+              <h2 className="text-3xl mb-4">Signup</h2>
+              <p className="mb-4">
                 Create your account. It’s free and only take a minute
               </p>
 
-              <p class="text-red-500 text-xs italic"> {totalRequired}</p>
+              <p className="text-red-500 text-xs italic"> {totalRequired}</p>
              
               <form action="#" onSubmit={handleSubmit}>
-                <div class="grid grid-cols-2 gap-5">
-                  <div>
+                  <div className="mt-5">
                     <input
                       type="text"
                       placeholder="Firstname"
                       id="firstName"
                       name="firstName"
-                      class="border border-gray-400 py-1 px-2"
+                      className="border border-gray-400 py-1 px-2 w-full"
                     />
-                    <p class="text-red-500 text-xs italic">{firstNameError}</p>
+                    <p className="text-red-500 text-xs italic">{firstNameError}</p>
                   </div>
-                  <div>
+                  <div className="mt-5">
                     <input
                       type="text"
                       placeholder="Lastname"
                       id="lastName"
                       name="lastName"
-                      class="border border-gray-400 py-1 px-2"
+                      className="border border-gray-400 py-1 px-2 w-full"
                     />
-                    <p class="text-red-500 text-xs italic">{lastNameError}</p>
+                    <p className="text-red-500 text-xs italic">{lastNameError}</p>
                   </div>
-                </div>
-                <div class="mt-5">
+                
+                <div className="mt-5">
                   <input
                     type="text"
                     placeholder="Email"
                     id="email"
                     name="email"
-                    class="border border-gray-400 py-1 px-2 w-full"
+                    className="border border-gray-400 py-1 px-2 w-full"
                   />
-                  <p class="text-red-500 text-xs italic">{emailError}</p>
+                  <p className="text-red-500 text-xs italic">{emailError}</p>
                 </div>
-                <div class="mt-5">
+                <div className="mt-5">
                   <input
                     type="password"
                     placeholder="Password"
                     id="password"
                     name="password"
-                    class="border border-gray-400 py-1 px-2 w-full"
+                    className="border border-gray-400 py-1 px-2 w-full"
                   />
-                  <p class="text-red-500 text-xs italic">{passwordError}</p>
+                  <p className="text-red-500 text-xs italic">{passwordError}</p>
                 </div>
-                <div class="mt-5">
+                <div className="mt-5">
                   <input
                     type="password"
                     placeholder="Confirm Password"
                     id="confPassword"
                     name="confPassword"
-                    class="border border-gray-400 py-1 px-2 w-full"
+                    className="border border-gray-400 py-1 px-2 w-full"
                   />
-                  <p class="text-red-500 text-xs italic">{confPasswordError}</p>
+                  <p className="text-red-500 text-xs italic">{confPasswordError}</p>
                 </div>
-                <div class="mt-5">
-                  <input type="checkbox" class="border border-gray-400" />
-                  <span>
-                    I accept the{" "}
-                    <a href="#" class=" font-semibold">
-                      Terms of Use
-                    </a>{" "}
-                    &{" "}
-                    <a href="#" class="">
-                      Privacy Policy
-                    </a>
-                  </span>
-                </div>
-                <div class="mt-5">
+                
+                <div className="mt-5">
                   <button
                     type="submit"
-                    class="w-full bg-[#80ED99] py-3 text-center text-white"
+                    className="w-full bg-[#80ED99] py-3 text-center text-white"
                   >
                     Register Now
                   </button>
                   <Link
-                  onClick={() => navigate("/docter/signin")}
+                  onClick={() => navigate("/doctor/signin")}
                   variant="body2"
                   component="button"
                 >

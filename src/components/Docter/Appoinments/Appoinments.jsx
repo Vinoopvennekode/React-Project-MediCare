@@ -8,7 +8,7 @@ import Modal from "./Modal";
 import { all } from "axios";
 
 function Appoinments() {
-  const { id,token } = useSelector((state) => state.docterLogin);
+  const { id,token } = useSelector((state) => state.doctorLogin);
 
   const [date, setDate] = useState(new Date());
   const [timeSlot, setTimeSlot] = useState([]);
@@ -25,7 +25,7 @@ function Appoinments() {
   };
 
   useEffect(() => {
-    axios.get(`docter/timeslots?id=${id}&day=${day}`,{headers:{'Authorization':token}}).then((res) => {
+    axios.get(`doctor/timeslots?id=${id}&day=${day}`,{headers:{'Authorization':token}}).then((res) => {
       console.log(res.data, "////--/-/-/-/-");
       if (res.data.time) {
         setTimeSlot(res.data.time);
@@ -47,7 +47,7 @@ function Appoinments() {
       timeStart: data.get("TimeSlot"),
     };
     console.log(data, "///*/*/*/*/*/*");
-    axios.post("/docter/getappoinments", data,{headers:{'Authorization':token}}).then((res) => {
+    axios.post("/doctor/getappoinments", data,{headers:{'Authorization':token}}).then((res) => {
       const allot = ([] = res.data.appoinments);
       setAppoinments(res.data.appoinments);
       const exist = allot.filter((e) => e.status === "approved");
@@ -60,6 +60,15 @@ function Appoinments() {
     setModalOn(true);
     SetAppnmnt(app);
   };
+
+
+  const handleCheck=(id)=>{
+
+    console.log(id,'idddddddddddddddddddd');
+    axios.post('/doctor/checked',{data:id},{headers:{'Authorization':token}}).then((res)=>{
+      console.log(res.data);
+    })
+  }
 
   return (
     <>
@@ -89,6 +98,8 @@ function Appoinments() {
                       Status
                     </th>
                     <th class="p-3 text-sm font-semibold tracking-wide text-left"></th>
+                    <th class="p-3 text-sm font-semibold tracking-wide text-left"></th>
+
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -115,6 +126,14 @@ function Appoinments() {
                           view
                         </button>
                       </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        <button
+                          onClick={() => handleCheck(app._id)}
+                          className="p-1 border border-black"
+                        >
+                        check
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -123,6 +142,7 @@ function Appoinments() {
             </div>
             <div className="flex md:w-1/3 flex-col">
               <Calendar
+              minDate={new Date()}
                 onChange={onChange}
                 value={date}
                 tileDisabled={({ date }) =>

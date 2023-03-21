@@ -1,15 +1,15 @@
 import React from "react";
 import Header from "../../components/user/Header/Header";
-import Docters from "../../components/user/Docters/Docters";
+import Doctors from "../../components/user/Doctors/Doctors";
 import Footer from "../../components/user/Footer/footer";
-const DocterList = () => {
+const DoctorList = () => {
   return (
     <>
       <Header />
-      <Docters />
+      <Doctors />
       <Footer />
     </>
   );
 };
 
-export default DocterList;
+export default DoctorList;

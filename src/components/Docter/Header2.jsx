@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import NotificationModal from './Notification/NotificationModal'
-
+import { setLogout } from "../../Store/Slice/DoctorLogin";
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
@@ -50,12 +50,25 @@ const Header = () => {
   const[modalOn,setModalOn]=useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { name } = useSelector((state) => state.docterLogin);
+  const { name } = useSelector((state) => state.doctorLogin);
+  const [currentUser, setcurrentUser] = useState(null);
 
 const ModalOpen=()=>{
   setModalOn(true)
 }
-console.log(modalOn);
+
+useEffect(() => {
+  if (name) {
+    setcurrentUser(name);
+  } else {
+    setcurrentUser(null);
+  }
+}, []);
+const handleLogout = () => {
+  dispatch(setLogout());
+  setcurrentUser(null)
+  navigate("/doctor/signin")
+};
 
 
   return (
@@ -63,7 +76,7 @@ console.log(modalOn);
       <ThemeProvider theme={theme}>
         <AppBar position="fixed" color={"secondary"}>
           <StyledToolbar>
-            <IconBox onClick={() => navigate("/")}>
+            <IconBox onClick={() => navigate("/doctor/home")}>
               <img src="./logo2.png" width={"50px"} alt="" />
               <Typography
                 variant="h6"
@@ -73,12 +86,12 @@ console.log(modalOn);
               </Typography>
             </IconBox>
             <UserBox>
-              <div onClick={()=>ModalOpen()} class="relative mx-3 inline-flex w-fit">
+              {/* <div onClick={()=>ModalOpen()} class="relative mx-3 inline-flex w-fit">
                 <div class="absolute top-0 right-0 bottom-auto left-auto z-10 inline-block translate-x-2/4 -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-400 py-1 px-2 text-center align-baseline text-xs font-bold leading-none text-white">
                   99+
                 </div>
                 <NotificationsIcon/>
-              </div>
+              </div> */}
               <Typography onClick={(e) => setOpen(true)} varient="span">
                 {name}
               </Typography>
@@ -97,8 +110,8 @@ console.log(modalOn);
                 horizontal: "right",
               }}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem onClick={() => navigate("/docter/signin")}>
+              <MenuItem onClick={()=>navigate('/doctor/profile')}>Profile</MenuItem>
+              <MenuItem onClick={handleLogout} >
                 Logout
               </MenuItem>
             </Menu>

@@ -1,81 +1,92 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
 import { useNavigate } from "react-router-dom";
-import { Dna } from  'react-loader-spinner'
 import { useSelector } from "react-redux";
+import { message, Popconfirm } from "antd";
 import Pagination from "@mui/material/Pagination";
 
-function Departments() {
+function AppoinmentsTable() {
   const { token } = useSelector((state) => state.adminLogin);
-
-  const [departments,setDepartments] = useState([]);
+  const [id, setId] = useState("");
+  const [appoinments, setAppoinments] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
-  const navigate=useNavigate()
 
+  const navigate = useNavigate();
+  const adminToken = localStorage.getItem("admintoken");
+  console.log(adminToken);
   useEffect(() => {
-    axios.get(`/admin/getdepartments?page=${currentPage}&limit=4`,{headers:{'Authorization':token}}).then((res) => {
-        setDepartments(res.data.departments);
-        setCurrentPage(res.data.currentPage);
-        setTotalPages(res.data.totalPages);
-    });
-  }, [currentPage,refresh]);
+    axios
+      .get(`/admin/appoinments?page=${currentPage}&limit=4`, {
+        headers: { 'Authorization': token },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setAppoinments(response.data.appoinments);
+        setCurrentPage(response.data.currentPage);
+        setTotalPages(response.data.totalPages);
+      })
+      .catch((error) => {});
+  }, [refresh, currentPage]);
 
  
+
+
+
   const handlePageChange = (event, value) => {
-    console.log(value);
     setCurrentPage(value);
-    setRefresh(!refresh)
   };
- 
 
   return (
     <>
       <div class="p-10 h-screen bg-gray-200">
         <div className="flex justify-between mb-3">
-        <h1 class="text-xl mb-2">Departments</h1>
-        <button onClick={(e)=>navigate('/admin/addDepartment')} className="p-2 text-xs font-medium  tracking-wider text-white bg-green-500 rounded-lg  cursor-pointer hover:bg-opacity-95">Add Departments</button>
+          <h1 class="text-xl mb-2">Appoinments</h1>
+          
         </div>
         <div class="overflow-auto rounded-lg shadow-md">
           <table class="w-full">
             <thead class="bg-gray-100 border-b-2 border-gray-200">
               <tr>
                 <th class="p-3 text-sm font-semibold tracking-wide text-left">
-                  No.
+                  Token
                 </th>
                 <th class="p-3 text-sm font-semibold tracking-wide text-left">
-                   Department Name
+                  Name
+                </th>
+                <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                  Address
+                </th>
+                <th class="p-3 text-sm font-semibold tracking-wide text-left">
+                  Mobile
                 </th>
                 <th class="p-3 text-sm font-semibold tracking-wide text-left">
                   Status
                 </th>
-                <th class="p-3 text-sm font-semibold tracking-wide text-left">
-                
-                </th>
+                <th class="p-3 text-sm font-semibold tracking-wide text-left"></th>
                 <th class="p-3 text-sm font-semibold tracking-wide text-left"></th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              { departments.map((dep) => (
+              {appoinments.map((app) => (
                 <tr>
+                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap"></td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {dep._id}
+                  {app.user?.name}
+              
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {dep.name}
+                    {app.user?.email}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {dep.status=== 'Active' ? <a className="p-1 bg-green-200 border-green-400	 border-2 "> Active</a>:<a className="p-1 bg-red-200 border-red-400	 border-2 ">Inactive</a>}
+                    {app.user?.phone}
                   </td>
                   <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <button onClick={(e)=>{navigate('/admin/department',{state:{id:dep._id}})}}>view details</button>
+                    {app?.status}
                   </td>
-                  
                 </tr>
               ))}
-             
             </tbody>
           </table>
         </div>
@@ -96,4 +107,4 @@ function Departments() {
   );
 }
 
-export default Departments;
+export default AppoinmentsTable;

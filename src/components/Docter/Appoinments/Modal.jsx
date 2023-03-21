@@ -3,7 +3,7 @@ import axios from'../../../axios/axios'
 import { useSelector } from "react-redux";
 function Modal({ setModalOn, app ,date,doctorId}) {
   const {id}=useSelector((state)=>state.userLogin)
-  const { token } = useSelector((state) => state.docterLogin);
+  const { token } = useSelector((state) => state.doctorLogin);
 console.log(date,'usrerererererre');
   const submit = (e) => {
     e.preventDefault();
@@ -16,7 +16,7 @@ console.log(date,'usrerererererre');
         allotedTime: data.get("allotedTime")
     };
     console.log(data);
-axios.post('/docter/allotedTime',data,{headers:{'Authorization':token}}).then((res)=>{
+axios.post('/doctor/allotedTime',data,{headers:{'Authorization':token}}).then((res)=>{
     console.log(res.data)
 })
 setModalOn(false);

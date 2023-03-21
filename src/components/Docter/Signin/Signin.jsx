@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../axios/axios";
+import{message }from 'antd'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "@mui/material/Link";
 import { useDispatch } from "react-redux";
-import { setLogin } from "../../../Store/Slice/DocterLogin";
+import { setLogin } from "../../../Store/Slice/DoctorLogin";
 
 function SigninForm() {
   const dispatch = useDispatch();
@@ -37,13 +38,13 @@ function SigninForm() {
           setPassword(false);
           setPasswordError("");
 
-          axios.post("/docter/login", data).then((response) => {
+          axios.post("/doctor/login", data).then((response) => {
             console.log(response.data);
-            const doctor = response.data.docterLogin;
-            if (response.data.docterLogin.Status) {
+            const doctor = response.data.doctorLogin;
+            if (response.data.doctorLogin.Status) {
               dispatch(
                 setLogin({
-                  user: "docter",
+                  user: "doctor",
                   name: doctor.name,
                   id:doctor.id,
                   token: doctor.token,
@@ -51,18 +52,19 @@ function SigninForm() {
               );
               localStorage.setItem(
                 "doctorToken",
-                JSON.stringify(response.data.docterLogin)
+                JSON.stringify(response.data.doctorLogin)
               );
               localStorage.setItem(
                 "docToken",
-                JSON.stringify(response.data.docterLogin.id)
+                JSON.stringify(response.data.doctorLogin.id)
               );
 
-              navigate("/docter/home");
+              navigate("/doctor/home");
             } else {
-              toast(response.data.docterLogin.message);
+              console.log(response.data.doctorLogin.message);
+              message.error(response.data.doctorLogin.message);
             }
-          });
+          }).catch(console.log('heoolo'));
         } else {
           setPassword(true);
           setPasswordError("Minimum 6 character");
@@ -78,6 +80,7 @@ function SigninForm() {
 
   return (
     <>
+    {<ToastContainer/>}
       <div class="min-h-screen py-40">
         <div class="container mx-auto">
           <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
@@ -127,7 +130,7 @@ function SigninForm() {
                     Sign in
                   </button>
                   <Link
-                    onClick={() => navigate("/docter/signup")}
+                    onClick={() => navigate("/doctor/signup")}
                     variant="body2"
                     component="button"
                   >

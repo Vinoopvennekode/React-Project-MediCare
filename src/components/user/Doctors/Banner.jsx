@@ -4,7 +4,7 @@ function Banner() {
   return (
     <>
       <div class="bg-gray-200 mt-16">
-        <div class="w-100% md:h-[414px] sm:h-[350px] bg-[url('./DocterBanner.png')] md:flex md:justify-between items-center">
+        <div class="w-100% md:h-[414px] sm:h-[350px] bg-[url('./DoctorBanner.png')] md:flex md:justify-between items-center">
           <div class="p-5">
             <span class="text-white text-md">
               Your health is our priority !
@@ -14,7 +14,7 @@ function Banner() {
             </h1>
           </div>
           <form class="w-full max-w-sm p-5">
-            <span class="text-white text-xl">Find Your Docter</span>
+            <span class="text-white text-xl">Find Your Doctor</span>
 
             <div class="flex items-end  ">
               <input
@@ -106,9 +106,9 @@ function Banner() {
           </div>
           <div class=" m-10 grid flex justify-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 col-span-3">
             <div class="w-[200px] bg-white rounded overflow-hidden border shadow-md relative ">
-              <img src="./docter.jpg" alt="" />
+              <img src="./doctor.jpg" alt="" />
               <div class="m-2">
-                <span class="font-bold text-md">Docter name</span>
+                <span class="font-bold text-md">Doctor name</span>
                 <span class="block text-gray-400 text-sm"> Speciality</span>
               </div>
               <div class="bg-gray-200  uppercase rounded-full p-1 absolute top-0 ml-2 mt-2">
@@ -116,9 +116,9 @@ function Banner() {
               </div>
             </div>
             <div class="w-[200px] bg-white rounded overflow-hidden border shadow-md relative ">
-              <img src="./docter.jpg" alt="" />
+              <img src="./doctor.jpg" alt="" />
               <div class="m-2">
-                <span class="font-bold text-md">Docter name</span>
+                <span class="font-bold text-md">Doctor name</span>
                 <span class="block text-gray-400 text-sm"> Speciality</span>
               </div>
               <div class="bg-gray-200  uppercase rounded-full p-1 absolute top-0 ml-2 mt-2">
@@ -126,9 +126,9 @@ function Banner() {
               </div>
             </div>
             <div class="w-[200px] bg-white rounded overflow-hidden border shadow-md relative ">
-              <img src="./docter.jpg" alt="" />
+              <img src="./doctor.jpg" alt="" />
               <div class="m-2">
-                <span class="font-bold text-md">Docter name</span>
+                <span class="font-bold text-md">Doctor name</span>
                 <span class="block text-gray-400 text-sm"> Speciality</span>
               </div>
               <div class="bg-gray-200  uppercase rounded-full p-1 absolute top-0 ml-2 mt-2">
@@ -136,9 +136,9 @@ function Banner() {
               </div>
             </div>
             <div class="w-[200px] bg-white rounded overflow-hidden border shadow-md relative ">
-              <img src="./docter.jpg" alt="" />
+              <img src="./doctor.jpg" alt="" />
               <div class="m-2">
-                <span class="font-bold text-md">Docter name</span>
+                <span class="font-bold text-md">Doctor name</span>
                 <span class="block text-gray-400 text-sm"> Speciality</span>
               </div>
               <div class="bg-gray-200  uppercase rounded-full p-1 absolute top-0 ml-2 mt-2">
@@ -146,9 +146,9 @@ function Banner() {
               </div>
             </div>
             <div class="w-[200px] bg-white rounded overflow-hidden border shadow-md relative ">
-              <img src="./docter.jpg" alt="" />
+              <img src="./doctor.jpg" alt="" />
               <div class="m-2">
-                <span class="font-bold text-md">Docter name</span>
+                <span class="font-bold text-md">Doctor name</span>
                 <span class="block text-gray-400 text-sm"> Speciality</span>
               </div>
               <div class="bg-gray-200  uppercase rounded-full p-1 absolute top-0 ml-2 mt-2">

@@ -7,8 +7,8 @@ const initialState = {
   token: null,
 };
 
-export const DocterLoginSlice = createSlice({
-  name: "docterLogin",
+export const DoctorLoginSlice = createSlice({
+  name: "doctorLogin",
   initialState,
   reducers: {
     setLogin: (state, action) => {
@@ -26,5 +26,5 @@ export const DocterLoginSlice = createSlice({
   },
 });
 
-export const { setLogin, setLogout } = DocterLoginSlice.actions;
-export default DocterLoginSlice.reducer;
+export const { setLogin, setLogout } = DoctorLoginSlice.actions;
+export default DoctorLoginSlice.reducer;

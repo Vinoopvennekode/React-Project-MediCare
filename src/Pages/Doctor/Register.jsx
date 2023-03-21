@@ -9,13 +9,13 @@ function Register() {
   const [reload, setReload] = useState(false);
   useEffect(() => {
     const doctor = JSON.parse(localStorage.getItem("docToken"));
-    console.log(doctor.docterId);
+    console.log(doctor.doctorId);
     axios
-      .get(`/docter/statusChecking?id=${doctor.docterId}`)
+      .get(`/doctor/statusChecking?id=${doctor.doctorId}`)
       .then((response) => {
         const result = response.data;
         if (result.doctorStatus === "pending") {
-          navigate("/docter/approval");
+          navigate("/doctor/approval");
           setReload(!reload);
         }
       });

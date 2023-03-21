@@ -153,7 +153,7 @@ function Sidebar() {
             >
               <BusinessIcon />
               <ListItemText sx={{ opacity: open ? 1 : 0, pl: 3 }}>
-                Docters
+                Doctors
               </ListItemText>
             </ListItemIcon>
           </ListItemButton>
@@ -188,7 +188,7 @@ function Sidebar() {
               justifyContent: open ? "initial" : "last",
               px: 2.5,
             }}
-            // onClick={() => navigate('/admin/jobs')}
+            onClick={() => navigate('/admin/appoinments')}
           >
             <ListItemIcon
               sx={{
