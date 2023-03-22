@@ -30,12 +30,10 @@ function Appoinment() {
   }
   const myChange = (dates) => {
     const date = moment(dates);
-    console.log(date,'date');
     const selectedDate=date.format("MMM Do YYYY");
     setDate(selectedDate)
-    console.log(selectedDate,'selected date');
     const dayOfWeek = date.format("dddd");
-    console.log(dayOfWeek,'dayofweek');
+    
     setMyValue(dates);
     setDay(dayOfWeek);
     setRefresh(!refresh);

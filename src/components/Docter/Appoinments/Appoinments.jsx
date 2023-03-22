@@ -9,7 +9,7 @@ import { all } from "axios";
 
 function Appoinments() {
   const { id,token } = useSelector((state) => state.doctorLogin);
-
+  const[refresh,setRefresh]=useState(false)
   const [date, setDate] = useState(new Date());
   const [timeSlot, setTimeSlot] = useState([]);
   const [day, setDay] = useState(moment(date).format("dddd"));
@@ -17,7 +17,6 @@ function Appoinments() {
   const [modalOn, setModalOn] = useState(false);
   const [appnmnt, SetAppnmnt] = useState([]);
   const [allotedTime, setAllotedTime] = useState([]);
-  console.log(date, "+++++", day);
   const onChange = (date) => {
     setDate(date);
     const day = moment(date).format("dddd");
@@ -26,14 +25,12 @@ function Appoinments() {
 
   useEffect(() => {
     axios.get(`doctor/timeslots?id=${id}&day=${day}`,{headers:{'Authorization':token}}).then((res) => {
-      console.log(res.data, "////--/-/-/-/-");
       if (res.data.time) {
         setTimeSlot(res.data.time);
       }
     });
   }, [date]);
 
-  console.log(timeSlot, "++++++++++++++++");
 
   // disable specific dates
   const disabledDates = [new Date(2023, 3, 10), new Date(2023, 3, 15)];
@@ -46,12 +43,12 @@ function Appoinments() {
       date: date,
       timeStart: data.get("TimeSlot"),
     };
-    console.log(data, "///*/*/*/*/*/*");
+ 
     axios.post("/doctor/getappoinments", data,{headers:{'Authorization':token}}).then((res) => {
       const allot = ([] = res.data.appoinments);
       setAppoinments(res.data.appoinments);
       const exist = allot.filter((e) => e.status === "approved");
-      console.log(exist);
+    
       setAllotedTime(exist);
     });
   };
@@ -63,10 +60,7 @@ function Appoinments() {
 
 
   const handleCheck=(id)=>{
-
-    console.log(id,'idddddddddddddddddddd');
     axios.post('/doctor/checked',{data:id},{headers:{'Authorization':token}}).then((res)=>{
-      console.log(res.data);
     })
   }
 
@@ -127,12 +121,14 @@ function Appoinments() {
                         </button>
                       </td>
                       <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                        <button
-                          onClick={() => handleCheck(app._id)}
-                          className="p-1 border border-black"
-                        >
+                       {app.status!=='checked'&&
+                       (<button
+                       onClick={() => handleCheck(app._id)}
+                       className="p-1 border border-black"
+                       >
                         check
-                        </button>
+                        </button>)
+                        } 
                       </td>
                     </tr>
                   ))}

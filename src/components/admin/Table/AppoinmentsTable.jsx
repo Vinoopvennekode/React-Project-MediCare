@@ -15,14 +15,12 @@ function AppoinmentsTable() {
 
   const navigate = useNavigate();
   const adminToken = localStorage.getItem("admintoken");
-  console.log(adminToken);
   useEffect(() => {
     axios
       .get(`/admin/appoinments?page=${currentPage}&limit=4`, {
         headers: { 'Authorization': token },
       })
       .then((response) => {
-        console.log(response.data);
         setAppoinments(response.data.appoinments);
         setCurrentPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);

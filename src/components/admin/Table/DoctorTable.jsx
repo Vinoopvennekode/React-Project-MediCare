@@ -15,12 +15,11 @@ function DoctorTable() {
  
   const navigate = useNavigate();
   const adminToken = localStorage.getItem("admintoken");
-  console.log(adminToken);
   useEffect(() => {
     axios
       .get(`/admin/doctors?page=${currentPage}&limit=4`, { headers: { Authorization: token } })
       .then((response) => {
-        console.log(response.data);
+        
         setDoctors(response.data.doctor);
         setCurrentPage(response.data.currentPage);
         setTotalPages(response.data.totalPages);
@@ -38,7 +37,7 @@ function DoctorTable() {
       )
       .then((res) => {
         if (res.data.success) {
-          console.log(res.data);
+          
           setRefresh(!refresh);
         } else {
           message.error(res.data.message);
@@ -47,7 +46,7 @@ function DoctorTable() {
   };
 
   const unblocDoctor = (id) => {
-    console.log(id, "unblock");
+    
     axios
       .patch(
         "/admin/unblockDoctor",
@@ -56,7 +55,7 @@ function DoctorTable() {
       )
       .then((response) => {
         if (response.data.success) {
-          console.log(response.data);
+       
           setRefresh(!refresh);
         } else {
           message.error(response.data.message);
@@ -65,7 +64,7 @@ function DoctorTable() {
   };
 
   const confirm = (e) => {
-    console.log(id);
+    
     axios
     .patch(
       "/admin/blockDoctor",
@@ -74,7 +73,7 @@ function DoctorTable() {
     )
     .then((res) => {
       if (res.data.success) {
-        console.log(res.data);
+       
         setRefresh(!refresh);
       } else {
         message.error(res.data.message);
@@ -84,7 +83,7 @@ function DoctorTable() {
   };
 
   const cancel = (e) => {
-    console.log(e);
+   
     message.error("Click on No");
   };
 

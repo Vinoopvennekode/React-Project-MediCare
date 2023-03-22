@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 function Notification() {
   const navigate = useNavigate();
   const { id ,token} = useSelector((state) => state.userLogin);
-console.log(id);
   const [notification, setNotification] = useState([]);
   const [seenNotification, setseenNotification] = useState([]);
 
@@ -15,10 +14,8 @@ console.log(id);
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    console.log('helllooo');
     axios.post(`/getAllNotifications`,{id},{headers:{'Authorization':token}}).then((response) => {
       const result = response.data;
-      console.log(result);
       if (result.success) {
         setNotification(result.clientNotifications);
         setseenNotification(result.clientSeenNotification);

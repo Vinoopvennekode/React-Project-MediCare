@@ -8,7 +8,7 @@ import { storage } from "../../../firebase/firebase";
 import { message } from "antd";
 import { useSelector } from "react-redux";
 import { ColorRing, Dna } from "react-loader-spinner";
-
+import { firebaseImage } from "../../../firebase/firebaseImage";
 function AdddeptForm() {
   const { token } = useSelector((state) => state.adminLogin);
   const [loading, setLoading] = useState(false);
@@ -44,29 +44,9 @@ function AdddeptForm() {
             setDeptImg(false);
             setDeptImgError("");
             if (data.deptImg.name) {
-              const dirs = Date.now();
-              const rand = Math.random();
-              const image = data.deptImg;
-              const imageRef = ref(
-                storage,
-                `/doctordeptImg/${dirs}${rand}_${image?.name}`
-              );
-              const toBase64 = (image) =>
-                new Promise((resolve, reject) => {
-                  const reader = new FileReader();
-                  reader.readAsDataURL(image);
-                  reader.onload = () => resolve(reader.result);
-                  reader.onerror = (error) => reject(error);
-                }).catch((err) => {
-                  console.log(err);
-                });
-              const imgBase = await toBase64(image);
-              await uploadString(imageRef, imgBase, "data_url").then(
-                async () => {
-                  const downloadURL = await getDownloadURL(imageRef);
-                  data.deptImg = downloadURL;
-                }
-              );
+              const url =await firebaseImage(data.deptImg)
+      data.deptImg=url
+      
             } else {
               data.deptImg = "";
             }
@@ -76,10 +56,11 @@ function AdddeptForm() {
                 headers: { Authorization: token },
               })
               .then((response) => {
-                console.log(response.data);
+              
                 if (response.data.status) {
                   setLoading(false)
-                  message.success("haiiiii");
+                  message.error(response.data.message);
+              message.success('department successfully added');
                   navigate("/admin/departments");
                 } else {
                   setLoading(false)

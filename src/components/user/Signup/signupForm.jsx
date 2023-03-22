@@ -61,7 +61,7 @@ export default function SigninForm() {
   const [confpasswordError, setConfPasswordError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
   const [otpToken, setOtpToken] = useState(null);
-  console.log(otpToken,'hello');
+
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {

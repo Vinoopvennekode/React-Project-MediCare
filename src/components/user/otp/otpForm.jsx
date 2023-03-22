@@ -39,18 +39,15 @@ function otpForm({otpToken}) {
     data = {
       otp: data.get("otp"),
     };
-    console.log(data);
+   
     if (data.otp) {
       const regNumber = /^[0-9]+$/;
       if (regNumber.test(data.otp)) {
-        console.log('1');
         setOtp(false);
         setOtpError("");
         if (data.otp.length <= 6) {
-          console.log('2');
           setOtp(false);
           setOtpError("");
-console.log(data,otpToken);
           axios
             .post(
               "/otpverify",
@@ -58,11 +55,9 @@ console.log(data,otpToken);
               { headers: { Authorization: otpToken } }
             )
             .then((res) => {
-              console.log(res.data);
               if (res.data.status === "success") {
                 Navigate("/signin");
               } else {
-                console.log(false);
               }
             });
         } else {

@@ -5,7 +5,14 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase/firebase";
 import { ColorRing, Dna } from "react-loader-spinner";
 import Swal from "sweetalert2";
+import { firebaseImage } from "../../../firebase/firebaseImage";
+import { message } from "antd";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 function Profile() {
+  const navigate=useNavigate()
+  const[update,setUpdate]=useState(false)
   const [doctor, setDoctor] = useState([]);
   const [loading, setLoading] = useState(false);
   const { id, token } = useSelector((state) => state.doctorLogin);
@@ -50,7 +57,6 @@ function Profile() {
         setDoctor(res.data.doctor);
       });
   }, [refresh]);
-  console.log(doctor);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,37 +75,13 @@ function Profile() {
       address: data.get("address"),
       doctorId: id,
     };
-    console.log(data);
-    if (data.doctorimg.name) {
-      const dirs = Date.now();
-      const rand = Math.random();
-      const image = data.doctorimg;
-      const imageRef = ref(
-        storage,
-        `/doctorImages/${dirs}${rand}_${image?.name}`
-      );
-      const toBase64 = (image) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(image);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        }).catch((err) => {
-          console.log(err);
-        });
-      const imgBase = await toBase64(image);
-      await uploadString(imageRef, imgBase, "data_url").then(async () => {
-        const downloadURL = await getDownloadURL(imageRef);
-        data.doctorimg = downloadURL;
-      });
-    } else {
-      data.doctorimg = "";
+    if (!data.doctorimg.name) {
+      data.doctorimg = doctor.doctorimg;
     }
-
-    console.log(data);
-    const regPhone = /^[0-9]+$/;
+    const regPhone =
+      /^(?!0000000000)\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
     const regName = /^[a-zA-Z]+$/;
-    const regemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const regemail = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
     setTotalRequired("");
     if (regName.test(data.firstName)) {
       setfirstName(false);
@@ -119,7 +101,7 @@ function Profile() {
               if (regName.test(data.department)) {
                 setDepartment(false);
                 setDepartmentError("");
-                if (regPhone.test(data.experience)) {
+                if (data.experience > 0) {
                   setExperience(false);
                   setExperienceError("");
                   if (regName.test(data.location)) {
@@ -129,20 +111,41 @@ function Profile() {
                       setFees(false);
                       setFeesError("");
 
-                      axios
-                        .post("/doctor/updateProfile", data, {
-                          headers: { Authorization: token },
-                        })
-                        .then((response) => {
-                          console.log(response.data, "response");
+                      if (data.doctorimg) {
+                        if (data.doctorimg !== doctor.doctorimg) {
+                          const url = await firebaseImage(data.doctorimg);
+                          data.doctorimg = url;
+                        }
 
-                          if (response.data.message === "success") {
-                            setLoading(false);
-                            setrefresh(!refresh);
-                          } else {
-                            toast(response.data.message);
-                          }
-                        });
+                        axios
+                          .post("/doctor/updateProfile", data, {
+                            headers: { Authorization: token },
+                          })
+                          .then((response) => {
+                           
+
+                            if (response.data.message === "success") {
+                              setLoading(false);
+                              setrefresh(!refresh);
+
+                              toast.success("profile successfully updated", {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "dark",
+                              });
+                              setUpdate(false)
+                            } else {
+                              toast(response.data.message);
+                            }
+                          });
+                      } else {
+                        setLoading(false);
+                      }
                     } else {
                       setFees(true);
                       setLoading(false);
@@ -201,11 +204,23 @@ function Profile() {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className=" flex justify-center my-24 ">
-        <div className="bg-green-200 px-32 pb-32 mt-28">
+        <div className="bg-green-200 px-18 md:px-32 pb-32 mt-24">
           <div className="">
             <div class="relative">
-              <div class="w-52 h-52 bg-indigo-100 mx-auto  shadow-2xl absolute inset-x-0 top-0 -mt-20 right-3/4 flex items-center justify-center text-indigo-500">
+              <div class="w-40  md:w-52 h-40 md:h-52 bg-indigo-100 mx-auto  shadow-2xl absolute inset-x-0 top-0 -mt-20 right-1/2 sm:right-3/4 flex items-center justify-center text-indigo-500">
                 <img
                   src={doctor.doctorimg}
                   className="object-cover w-full h-full"
@@ -229,6 +244,7 @@ function Profile() {
                     type="text"
                     id="firstName"
                     name="firstName"
+                    onChange={()=>setUpdate(true)}
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     defaultValue={doctor.firstName}
                   />
@@ -245,6 +261,7 @@ function Profile() {
                     type="text"
                     id="lastName"
                     name="lastName"
+                    onChange={()=>setUpdate(true)}
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     defaultValue={doctor.lastName}
                   />
@@ -260,6 +277,7 @@ function Profile() {
                   <select
                     class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     name="department"
+                    onChange={()=>setUpdate(true)}
                     defaultValue={doctor.department}
                   >
                     {departments?.map((dep) => (
@@ -276,9 +294,10 @@ function Profile() {
                     Phone Number
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     id="phoneNumber"
                     name="phoneNumber"
+                    onChange={()=>setUpdate(true)}
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     defaultValue={doctor.phoneNumber}
                     required
@@ -296,6 +315,7 @@ function Profile() {
                     type="number"
                     id="fees"
                     name="fees"
+                    onChange={()=>setUpdate(true)}
                     class="appearance-none bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                     defaultValue={doctor.fees}
                   />
@@ -312,6 +332,7 @@ function Profile() {
                     type="number"
                     id="experience"
                     name="experience"
+                    onChange={()=>setUpdate(true)}
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     defaultValue={doctor.experience}
                   />
@@ -328,6 +349,7 @@ function Profile() {
                     type="text"
                     id="location"
                     name="location"
+                    onChange={()=>setUpdate(true)}
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     defaultValue={doctor.location}
                   />
@@ -344,6 +366,7 @@ function Profile() {
                     type="file"
                     id="doctorimg"
                     name="doctorimg"
+                    onChange={()=>setUpdate(true)}
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder=""
                   />
@@ -361,6 +384,7 @@ function Profile() {
                   type="text"
                   id="address"
                   name="address"
+                  onChange={()=>setUpdate(true)}
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   defaultValue={doctor.address}
                 />
@@ -374,21 +398,24 @@ function Profile() {
                   Email address
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   id="email"
                   name="email"
+                  onChange={()=>setUpdate(true)}
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   defaultValue={doctor.email}
                 />
                 <p class="text-red-500 text-xs italic">{emailError}</p>
               </div>
 
-              <button
+              {update?(<button
                 type="submit"
                 class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Update
-              </button>
+              </button>):(<button 
+                class="text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onClick={()=>navigate('/doctor/home')}>Back</button>)}
             </form>
           </div>
         </div>

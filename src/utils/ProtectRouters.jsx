@@ -22,7 +22,7 @@ export function UserProtectRouters() {
 
 export function UserBlock(){
   const{block}=useSelector((state)=>state.userLogin)
-  console.log(block,'blocccckkkkkk');
+
   return block==='true'? <Navigate to='/signin'/>:<Outlet/>
 }
 
@@ -39,19 +39,19 @@ export function UserBlock(){
 
 export function DoctorStatusProtectRouters() {
   const doctor = JSON.parse(localStorage.getItem("docToken"));
-  console.log(doctor);
+ 
   const navigate = useNavigate();
   axios.get(`/doctor/statusChecking?id=${doctor}`).then((response) => {
     const result = response.data;
-    console.log(result);
+
     const reason = result.doctor.rejectReason;
 
     if (result.doctorStatus === "register") {
-      console.log('heeolllo');
+     
       return navigate("/doctor/register" ,{state:{id:result}}) ;
     }
     if (result.doctorStatus === "pending") {
-      console.log('22222');
+    
      return navigate('/doctor/approval');
     }
     if (result.doctorStatus === "reject") {

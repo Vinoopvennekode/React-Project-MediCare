@@ -25,7 +25,6 @@ function Departments() {
 
  
   const handlePageChange = (event, value) => {
-    console.log(value);
     setCurrentPage(value);
     setRefresh(!refresh)
   };

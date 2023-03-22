@@ -19,7 +19,7 @@ function department() {
 
   useEffect(() => {
     axios.post("/admin/singledepartment", { id: data },{headers:{'Authorization':token}}).then((res) => {
-      console.log(res.data);
+   
       setDepartment(res.data.department);
     });
   }, []);
@@ -27,7 +27,7 @@ function department() {
 
   const [dropdown, setDropdown] = useState(false);
   function handleDelete(id) {
-    console.log(id);
+  
     Swal.fire({
       title: 'Are you sure?',
       text: 'You will not be able to recover this data!',
@@ -41,7 +41,6 @@ function department() {
         // TODO: Implement delete logic
         axios.delete(`/admin/deleteDepartment?id=${id}`,{headers:{'Authorization':token}}).then((response) => {
             if(response.data.success){
-                console.log(response.data,"response");
                 toast(response.data.message)
      
             navigate('/admin/departments')

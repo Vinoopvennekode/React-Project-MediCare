@@ -58,13 +58,13 @@ const Signin = () => {
         if (data.password.length >= 6) {
           setPassword(false);
           setPasswordError("");
-        console.log(data);
+        
           //* LOGIN FUNCTION HERE *//
           axios.post("admin/adminLogin", data).then((response) => {
           
             const admin = response.data.adminResult;
             if (!admin.Status) {
-              console.log("okkkkkk");
+            
               toast(user.message);
             } else {
               localStorage.setItem("admintoken", admin.token);

@@ -16,7 +16,6 @@ function AppoinmentHistory() {
     setDay(day);
   };
 
-  console.log(date, day);
 
   const disabledDates = [new Date(2023, 3, 10), new Date(2023, 3, 15)];
 
@@ -28,19 +27,17 @@ function AppoinmentHistory() {
         { headers: { Authorization: token } }
       )
       .then((res) => {
-        console.log(res.data);
         setAppoinments(res.data.appoinments);
       });
   }, [date]);
 
-  console.log(appoinments,'ljksghadlkjhasdlkjsdhakj;');
 
   return (
     <>
       <div className="mt-24">
         <div className="p-10  h-screen bg-gray-100">
           <div className="lg:flex justify-between">
-            <div class="overflow-auto w-full lg:w-2/3 lg:mx-16 rounded-lg shadow-md">
+          {appoinments.length?( <div class="overflow-auto w-full lg:w-2/3 lg:mx-16 rounded-lg shadow-md">
               <table class="w-full">
                 <thead class="bg-gray-100 border-b-2 border-gray-200">
                   <tr>
@@ -82,8 +79,8 @@ function AppoinmentHistory() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
-            </div>
+                </table>
+            </div>):(<div>there is no appoinments</div>)}
             <div className="flex lg:w-1/3 flex-col">
               <Calendar
                 onChange={onChange}

@@ -25,7 +25,7 @@ function SigninForm() {
       email: data.get("email"),
       password: data.get("password"),
     };
-    console.log(data);
+    
     if (data.email && data.password) {
       const regEmail =
         /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
@@ -39,7 +39,7 @@ function SigninForm() {
           setPasswordError("");
 
           axios.post("/doctor/login", data).then((response) => {
-            console.log(response.data);
+           
             const doctor = response.data.doctorLogin;
             if (response.data.doctorLogin.Status) {
               dispatch(
@@ -61,10 +61,10 @@ function SigninForm() {
 
               navigate("/doctor/home");
             } else {
-              console.log(response.data.doctorLogin.message);
+              
               message.error(response.data.doctorLogin.message);
             }
-          }).catch(console.log('heoolo'));
+          }).catch();
         } else {
           setPassword(true);
           setPasswordError("Minimum 6 character");

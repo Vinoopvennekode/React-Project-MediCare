@@ -26,16 +26,13 @@ const { id } = useSelector((state) => state.doctorLogin);
       start: data.get("start"),
       end: data.get("end"),
     };
-    console.log(data);
   axios.post('/doctor/leaveDays', { data: data, id: id }).then((res)=>{
-    console.log(res.data);
   })
     
   };
 
 
 
-  console.log(myValue);
   const myInvalid = [
   
     {

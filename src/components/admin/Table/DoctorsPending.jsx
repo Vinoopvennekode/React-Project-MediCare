@@ -34,12 +34,10 @@ function DoctorPending() {
 
 
   const confirm = (e) => {
-    console.log(id);
     axios
       .patch("/admin/approve", { id }, { headers: { Authorization: token } })
       .then((response) => {
         if (response.data.success) {
-          console.log(response.data);
           setRefresh(!refresh);
         } else {
           message.error(response.data.message);
@@ -49,7 +47,6 @@ function DoctorPending() {
   };
 
   const cancel = (e) => {
-    console.log(e);
     message.error("Click on No");
   };
 

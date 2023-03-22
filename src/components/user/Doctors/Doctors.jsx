@@ -21,7 +21,7 @@ function Doctors() {
   // useEffect(() => {
   //   axios.get("/doctors").then((res) => {
   //     setDoctors(res.data.doctor);
-  //     console.log(res.data.doctor, "=========================");
+  //   
   //   });
   // }, [refresh === 0]);
 
@@ -59,7 +59,7 @@ function Doctors() {
             .toLowerCase()
             .indexOf(SearchInput.toLowerCase()) > -1
       );
-      console.log(uppdateUse);
+     
       setDoctors(uppdateUse);
     } else {
       setRefresh(1);

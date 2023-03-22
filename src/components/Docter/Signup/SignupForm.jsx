@@ -30,7 +30,7 @@ function SignupForm() {
       password: data.get("password"),
       confPassword: data.get("confPassword"),
     };
-    console.log(data);
+    
     if (
       data.firstName &&
       data.lastName &&
@@ -41,7 +41,7 @@ function SignupForm() {
       const regName = /^[a-zA-Z]+$/;
       const regEmail =
         /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
-      const regPhone = /^[0-9]+$/;
+     
       const password =
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
       setTotalRequired("");
@@ -65,7 +65,6 @@ function SignupForm() {
                 axios.post("/doctor/signup", data).then((response) => {
                  
                   if (response.data.status === "success") {
-                    console.log(response.data)
                     localStorage.setItem('docToken',JSON.stringify(response.data))
                     navigate("/doctor/register");
                   } else {

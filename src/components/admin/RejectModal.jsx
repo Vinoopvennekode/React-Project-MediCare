@@ -33,7 +33,7 @@ const handleSubmit=(event)=>{
     data = {
       reason: data.get("reason"),
     };
-    console.log(data);
+   
     if(data.reason){
         axios
         .patch("/admin/reject", { data:data.reason,id:doctorsM._id }, { headers: { Authorization: token } })

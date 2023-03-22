@@ -11,7 +11,7 @@ function table() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const { token } = useSelector((state) => state.adminLogin);
-console.log(token,'admin token');
+
   useEffect(() => {
     axios.get(`/admin/users?page=${currentPage}&limit=4`,{headers:{'Authorization':token}}).then((res) => {
       setUsers(res.data.users);
@@ -22,7 +22,7 @@ console.log(token,'admin token');
   const blockUser = (id) => {
     axios.patch("/admin/blockUser", { id },{headers:{'Authorization':token}}).then((res) => {
       if (res.data.success) {
-        console.log(res.data);
+      
         dispatch(
           setLogin({
             user: "user",
@@ -39,10 +39,8 @@ console.log(token,'admin token');
   };
 
   const unblockUser = (id) => {
-    console.log(id, "unblock");
     axios.patch("/admin/unblockUser", { id },{headers:{'Authorization':token}}).then((response) => {
       if (response.data.success) {
-        console.log(response.data);
         dispatch(
           setLogin({
             user: "user",

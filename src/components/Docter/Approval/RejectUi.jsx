@@ -10,7 +10,6 @@ function Approvel() {
   const doctor = JSON.parse(localStorage.getItem("docToken"));
 
   const confirm = (e) => {
-    console.log(e);
     axios.delete(`/doctor/deleteAccount?id=${doctor}`).then((res) => {
       if (res.data.success) {
         Navigate("/doctor/signin");
@@ -20,7 +19,7 @@ function Approvel() {
   };
 
   const cancel = (e) => {
-    console.log(e);
+    
     message.error("not deleted");
   };
   return (

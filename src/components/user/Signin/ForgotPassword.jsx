@@ -18,13 +18,13 @@ setPhone(data.phoneNumber)
         setPhoneNumber(false);
         setPhoneNumberError("");
         axios.post("/numberCheck", data).then((res) => {
-          console.log(res.data, "daaataa");
+        
           if (res.data.status) {
-            console.log("succus");
+         
             setOtpForgot(true);
             setForgot(false);
           } else {
-            console.log("fail");
+        
           }
         });
       } else {

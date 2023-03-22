@@ -25,7 +25,6 @@ const Modal = ({ date, setModalOn, doctor, time }) => {
 
   const [open, setOpen] = useState(false);
   const { id, token } = useSelector((state) => state.userLogin);
-  console.log(doctor._id, "++++++++++++++++++++++++++++++++++++");
   const handleCancelClick = () => {
     setModalOn(false);
   };
@@ -58,7 +57,6 @@ const Modal = ({ date, setModalOn, doctor, time }) => {
           reader.onload = () => resolve(reader.result);
           reader.onerror = (error) => reject(error);
         }).catch((err) => {
-          console.log(err);
         });
       const imgBase = toBase64(image);
       uploadString(imageRef, imgBase, "data_url").then(async () => {
@@ -98,7 +96,6 @@ const Modal = ({ date, setModalOn, doctor, time }) => {
               })
               .then((res) => {
                message.error(res.data.message)
-                console.log(res.data);
                
               });
               Swal.fire(

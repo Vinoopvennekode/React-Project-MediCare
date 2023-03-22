@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { options } from "@mobiscroll/react";
 import { ColorRing, Dna } from "react-loader-spinner";
+import { firebaseImage } from "../../../firebase/firebaseImage";
 
 function Register() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ function Register() {
     setLoading(true);
 
     const doctor = JSON.parse(localStorage.getItem("docToken"));
-    console.log(doctor, "ddoooocttooorr");
+  
     let data = new FormData(e.currentTarget);
     data = {
       department: data.get("department"),
@@ -58,52 +59,18 @@ function Register() {
       doctorId: doctor,
     };
     if (data.doctorimg.name) {
-      const dirs = Date.now();
-      const rand = Math.random();
-      const image = data.doctorimg;
-      const imageRef = ref(
-        storage,
-        `/doctorImages/${dirs}${rand}_${image?.name}`
-      );
-      const toBase64 = (image) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(image);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        }).catch((err) => {
-          console.log(err);
-        });
-      const imgBase = await toBase64(image);
-      await uploadString(imageRef, imgBase, "data_url").then(async () => {
-        const downloadURL = await getDownloadURL(imageRef);
-        data.doctorimg = downloadURL;
-      });
+
+     const url =await firebaseImage(data.doctorimg)
+     data.doctorimg=url
+     
+     
     } else {
       data.doctorimg = "";
     }
     if (data.certificate.name) {
-      const dirs = Date.now();
-      const rand = Math.random();
-      const image = data.certificate;
-      const imageRef = ref(
-        storage,
-        `/doctorcertificate/${dirs}${rand}_${image?.name}`
-      );
-      const toBase64 = (image) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(image);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        }).catch((err) => {
-          console.log(err);
-        });
-      const imgBase = await toBase64(image);
-      await uploadString(imageRef, imgBase, "data_url").then(async () => {
-        const downloadURL = await getDownloadURL(imageRef);
-        data.certificate = downloadURL;
-      });
+      const url =await firebaseImage(data.certificate)
+      data.certificate=url
+      
     } else {
       data.certificate = "";
     }
@@ -119,10 +86,9 @@ function Register() {
       data.certificate &&
       data.address
     ) {
-      const regPhone = /^[0-9]+$/;
+      const regPhone =  /^(?!0000000000)\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
       const regName = /^[a-zA-Z]+$/;
       setTotalRequired("");
-
       if (regPhone.test(data.phoneNumber)) {
         setPhoneNumber(false);
         setPhoneNumberError("");
@@ -153,16 +119,18 @@ function Register() {
                         if (data.address) {
                           setAddress(false);
                           setAddressError("");
+                      
                           axios
                             .post("/doctor/register", data)
                             .then((response) => {
-                              console.log("haiii");
-                              console.log(response.data, "response");
+                          
 
                               if (response.data.message === "success") {
                                 setLoading(false);
                                 navigate("/doctor/approval");
                               } else {
+                          setLoading(false);
+
                                 toast(response.data.message);
                               }
                             });

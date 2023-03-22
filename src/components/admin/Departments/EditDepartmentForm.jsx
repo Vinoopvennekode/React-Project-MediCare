@@ -5,12 +5,15 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase/firebase";
-import { message } from "antd";
+import{message }from 'antd'
 import { useSelector } from "react-redux";
+import { ColorRing, Dna } from "react-loader-spinner";
+import { firebaseImage } from "../../../firebase/firebaseImage";
 
 function EditdeptForm() {
+  // const [messageApi, contextHolder] = message.useMessage();
   const { token } = useSelector((state) => state.adminLogin);
-
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const [department, setDepartment] = useState([]);
   let data = location.state.id;
@@ -25,21 +28,25 @@ function EditdeptForm() {
   const [selectedOptionError, setSelectedOptionError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
 
-
-
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
   };
 
   useEffect(() => {
-    axios.post("/admin/singledepartment", { id: data }).then((res) => {
-      console.log(res.data);
-      setDepartment(res.data.department);
-      setSelectedOption(res.data.department.status)
-    });
-  },[]);
+    axios
+      .post(
+        "/admin/singledepartment",
+        { id: data },
+        { headers: { Authorization: token } }
+      )
+      .then((res) => {
+        setDepartment(res.data.department);
+        setSelectedOption(res.data.department.status);
+      });
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     let data = new FormData(e.currentTarget);
     data = {
       name: data.get("name"),
@@ -47,62 +54,54 @@ function EditdeptForm() {
       deptImg: data.get("deptImg"),
       status: data.get("status"),
     };
-    if (data.deptImg.name) {
-      const dirs = Date.now();
-      const rand = Math.random();
-      const image = data.deptImg;
-      const imageRef = ref(
-        storage,
-        `/doctordeptImg/${dirs}${rand}_${image?.name}`
-      );
-      const toBase64 = (image) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(image);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        }).catch((err) => {
-          console.log(err);
-        });
-      const imgBase = await toBase64(image);
-      await uploadString(imageRef, imgBase, "data_url").then(async () => {
-        const downloadURL = await getDownloadURL(imageRef);
-        data.deptImg = downloadURL;
-      });
-    } else {
+    if (!data.deptImg.name) {
       data.deptImg = department.deptImg;
     }
-
     if (data.name && data.description && data.deptImg) {
-      if (data.name) {
+      const regName = /^[a-zA-Z]+$/;
+      if (regName.test(data.name)) {
         setName(false);
         setNameError("");
         if (data.description) {
           setDescrption(false);
           setDescrptionError("");
           if (data.deptImg) {
+            if (data.deptImg !== department.deptImg) {
+              const url =await firebaseImage(data.deptImg)
+              data.deptImg=url
+            }
             setDeptImg(false);
             setDeptImgError("");
-            axios.post("/admin/editDept", {data:data,id:department._id},{headers:{'Authorization':token}}).then((response) => {
-              console.log(response.data);
-              if (response.data.status) {
-                message.success("haiiiii");
-                navigate("/admin/departments");
-              } else {
-                toast(response.data.message);
-              }
-            });
+            axios
+              .post(
+                "/admin/editDept",
+                { data: data, id: department._id },
+                { headers: { Authorization: token } }
+              )
+              .then((response) => {
+                if (response.data.message) {
+                  setLoading(false)
+              message.error(response.data.message);
+              message.success(response.data.message);
+                  navigate("/admin/departments");
+                } else {
+                  toast('somthing went wrong');
+                }
+              });
           } else {
+            setLoading(false)
             setDeptImg(true);
             setDeptImgError("Please upload image");
           }
         } else {
+          setLoading(false)
           setDescrption(true);
           setDescrptionError("Please enter description");
         }
       } else {
+        setLoading(false)
         setName(true);
-        setNameError("Please enter name");
+        setNameError("Please enter valid speciality name");
       }
     } else {
       setTotalRequired("All feilds are required");
@@ -111,8 +110,8 @@ function EditdeptForm() {
 
   return (
     <>
+  
       <ToastContainer />
-
       <div className="mt-9 flex justify-center">
         <div className="flex flex-col">
           <div className="mb-9">
@@ -136,7 +135,6 @@ function EditdeptForm() {
                 type="text"
                 id="name"
                 name="name"
-                
                 defaultValue={department?.name}
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
@@ -217,6 +215,22 @@ function EditdeptForm() {
               Submit
             </button>
           </form>
+          {loading && (
+            <div className=" p-10 bg-gray-100 rounded-lg overflow-auto shadow-xl transform transition-all opacity-70 fixed inset-0 z-50  ">
+              <div className=" flex h-screen justify-center items-center ">
+                <div className="flex-col justify-center   py-12 px-10 ">
+                  <Dna
+                    visible={true}
+                    height="160"
+                    width="160"
+                    ariaLabel="dna-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="dna-wrapper"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

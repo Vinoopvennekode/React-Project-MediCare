@@ -10,12 +10,12 @@ function DoctorHome() {
   const [reload, setReload] = useState(false);
   useEffect(() => {
     const doctor = JSON.parse(localStorage.getItem("docToken"));
-    console.log(doctor);
+ 
     axios
       .get(`/doctor/statusChecking?id=${doctor}`)
       .then((response) => {
         const result = response.data;
-        console.log(result.doctor.id);
+        
         const reason=result.doctor.rejectReason
       
         if (result.doctorStatus === "register") {

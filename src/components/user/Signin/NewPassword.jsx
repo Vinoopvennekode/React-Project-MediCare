@@ -29,13 +29,13 @@ function NewPassword({ phone,setNewPassword }) {
           setPasswordError("");
           setConfPasswordError("");
           axios.post("/setNewPassword", data).then((res) => {
-            console.log(res.data, "daaatahelloooeoeoeoeoeoeoeooeoeoe");
+      
             if (res.data.status) {
               setNewPassword(false)
-              console.log("succus");
+      
               Navigate('/signin')
             } else {
-              console.log("fail");
+       
             }
           });
         } else {

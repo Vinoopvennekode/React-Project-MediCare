@@ -8,13 +8,11 @@ import { useLocation } from "react-router-dom";
 const DoctorSchedule = () => {
   const location = useLocation();
   const myValue = location.state;
-  const { id,token } = useSelector((state) => state.doctorLogin);
+  const { id, token } = useSelector((state) => state.doctorLogin);
   const [date, setDate] = useState([]);
   const [app, setApp] = useState();
   const [time, setTime] = useState();
   const [refresh, setRefresh] = useState(false);
-
-console.log(token);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,27 +24,37 @@ console.log(token);
       end: data.get("end"),
     };
     setDate(data);
-    axios.post("/doctor/addAppoinment", { data: data, id: id },{headers:{'Authorization':token}}).then((res) => {
-      setRefresh(!refresh);
-    });
+    axios
+      .post(
+        "/doctor/addAppoinment",
+        { data: data, id: id },
+        { headers: { Authorization: token } }
+      )
+      .then((res) => {
+        setRefresh(!refresh);
+      });
   };
 
   useEffect(() => {
-    axios.post("/doctor/viewappoinment", { data: id },{headers:{'Authorization':token}}).then((res) => {
-   
-console.log(res.data.app);
-   
-      setApp(res.data.app);
-    });
+    axios
+      .post(
+        "/doctor/viewappoinment",
+        { data: id },
+        { headers: { Authorization: token } }
+      )
+      .then((res) => {
+        setApp(res.data.app);
+      });
   }, [refresh]);
 
   const deleteAppo = (data) => {
-   axios.delete(`/doctor/deleteAppoinment?id=${data}&doctor=${id}`,{headers:{'Authorization':token}}).then((res)=>{
-
-    console.log(res.data,'heloooooooooooo');
-setApp(res.data)
-  })
-    ;
+    axios
+      .delete(`/doctor/deleteAppoinment?id=${data}&doctor=${id}`, {
+        headers: { Authorization: token },
+      })
+      .then((res) => {
+        setApp(res.data);
+      });
   };
 
   return (
@@ -85,7 +93,7 @@ setApp(res.data)
               >
                 End Time:
               </label>
-              <input class=" w-full" type="time" id="end" name="end"  />
+              <input class=" w-full" type="time" id="end" name="end" />
             </div>
             <div class="w-1/4">
               <button
@@ -128,10 +136,9 @@ setApp(res.data)
                     {data.time.map((time) => (
                       <div className="py-1">
                         <button
-                        onClick={()=>deleteAppo(time._id)}
+                          onClick={() => deleteAppo(time._id)}
                           class="bg-red-500 flex hover:bg-red-700 text-white  py-1 px-1 rounded"
                           type="button"
-                        
                         >
                           Delete
                         </button>

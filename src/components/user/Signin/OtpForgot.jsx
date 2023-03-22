@@ -40,25 +40,25 @@ function otpForm({ phone, setOtpForgot, setNewPassword }) {
       phone: phone,
       otp: data.get("otp"),
     };
-    console.log(data);
+
     if (data.otp) {
       const regNumber = /^[0-9]+$/;
       if (regNumber.test(data.otp)) {
-        console.log("1");
+      
         setOtp(false);
         setOtpError("");
         if (data.otp.length <= 6) {
-          console.log("2");
+          
           setOtp(false);
           setOtpError("");
-          console.log(data);
+     
           axios.post("/forgotOtpVerify", { data: data }).then((res) => {
-            console.log(res.data);
+        
             if (res.data.status) {
               setOtpForgot(false);
               setNewPassword(true);
             } else {
-              console.log(false);
+         
             }
           });
         } else {

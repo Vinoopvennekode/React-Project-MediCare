@@ -25,7 +25,6 @@ function DailySchedule() {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Send form data to server here
-    console.log(`Form submitted: ${name}, ${email}, ${selectedSlot}`);
     // Clear form data
     setName("");
     setEmail("");

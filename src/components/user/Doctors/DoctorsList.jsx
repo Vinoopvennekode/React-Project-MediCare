@@ -9,7 +9,6 @@ function DoctorsList({ doc }) {
   const myChange = (ev) => {
     setMyValue(ev.value);
   };
-  console.log(myValue);
 
   return (
     <div className="p-10 flex flex-col sm:flex sm:flex-row justify-between border-b-4  border-gray-200">
