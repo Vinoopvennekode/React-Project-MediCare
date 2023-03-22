@@ -65,7 +65,7 @@ const Signin = () => {
             const admin = response.data.adminResult;
             if (!admin.Status) {
             
-              toast(user.message);
+              toast('email or password incorrect');
             } else {
               localStorage.setItem("admintoken", admin.token);
               dispatch(
