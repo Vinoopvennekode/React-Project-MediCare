@@ -5,7 +5,7 @@ import Signin from "../Pages/User/Signin";
 
 import Doctors from "../Pages/User/Doctors";
 import Appoinment from "../Pages/User/Appoinment";
-import Specialities from "../pages/User/Specialities";
+import Specialities from "../Pages/User/Specialities";
 import Notifications from "../Pages/User/Notifications";
 import Payment from "../Pages/User/PaymentPage";
 import { UserProtectRouters } from "../utils/ProtectRouters";
@@ -20,7 +20,6 @@ function User() {
 
         <Route element={<UserBlock />}>
           <Route element={<UserProtectRouters />}>
-            
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/specialities" element={<Specialities />} />
             <Route path="/notifications" element={<Notifications />} />
