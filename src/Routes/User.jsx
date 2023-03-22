@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "../Pages/User/HomePage";
 import Signup from "../Pages/User/Signup";
 import Signin from "../Pages/User/Signin";
-import DoctorList from "../Pages/User/DoctorList";
+
 import Doctors from "../Pages/User/Doctors";
 import Appoinment from "../Pages/User/Appoinment";
 import Specialities from "../pages/User/Specialities";
@@ -20,7 +20,7 @@ function User() {
 
         <Route element={<UserBlock />}>
           <Route element={<UserProtectRouters />}>
-            <Route path="/doctorList" element={<DoctorList />} />
+            
             <Route path="/doctors" element={<Doctors />} />
             <Route path="/specialities" element={<Specialities />} />
             <Route path="/notifications" element={<Notifications />} />
