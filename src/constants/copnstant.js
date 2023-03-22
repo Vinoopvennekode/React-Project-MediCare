@@ -1,3 +1,3 @@
-const baseUrl = 'http://localhost:5000';
+const baseUrl = 'https://api.medicarebooking.online/';
 
 export default baseUrl;
