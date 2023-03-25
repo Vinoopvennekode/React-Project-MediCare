@@ -1,6 +1,8 @@
 import React from "react";
+import {useNavigate} from 'react-router-dom'
 
 const Card2 = () => {
+  const navigate=useNavigate()
   const arr = [
     "Acne, pimple or skin issues",
     "Cold, cough or fever",
@@ -31,13 +33,13 @@ const Card2 = () => {
             <div>
               <div className="card flex flex-col justify-center bg-white w-[200px] h-[350px]">
                 <div className="top">
-                  <img className="rounded-full  " src="./cough.jpg" alt="" />
+                  <img className="rounded-full  " src="/cough.jpg" alt="" />
                 </div>
                 <div className="bottom flex justify-center items-center p-3 bg-">
                   <div className=" text-md my-1">{name}</div>
                 </div>
-                <button className="bg-transparent hover:bg-blue-500 text-blue-700 font hover:text-white py-2 px-4  hover:border-transparent rounded">
-                  Consult Now
+                <button onClick={()=>navigate('/doctors')} className="bg-transparent hover:bg-blue-500 text-blue-700 font hover:text-white py-2 px-4  hover:border-transparent rounded">
+                   Now
                 </button>
               </div>
             </div>

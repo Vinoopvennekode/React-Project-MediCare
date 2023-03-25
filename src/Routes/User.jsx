@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "../Pages/User/HomePage";
 import Signup from "../Pages/User/Signup";
 import Signin from "../Pages/User/Signin";
-
 import Doctors from "../Pages/User/Doctors";
 import Appoinment from "../Pages/User/Appoinment";
 import Specialities from "../Pages/User/Specialities";
@@ -17,7 +16,6 @@ function User() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
-
         <Route element={<UserBlock />}>
           <Route element={<UserProtectRouters />}>
             <Route path="/doctors" element={<Doctors />} />

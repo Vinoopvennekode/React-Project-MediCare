@@ -29,7 +29,7 @@ function Appoinments() {
         setTimeSlot(res.data.time);
       }
     });
-  }, [date]);
+  }, [date,refresh]);
 
 
   // disable specific dates
@@ -61,6 +61,7 @@ function Appoinments() {
 
   const handleCheck=(id)=>{
     axios.post('/doctor/checked',{data:id},{headers:{'Authorization':token}}).then((res)=>{
+      setRefresh(!refresh)
     })
   }
 

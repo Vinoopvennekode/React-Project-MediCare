@@ -10,6 +10,7 @@ import Schedule from '../Pages/Doctor/ScheduleTime'
 import Calender from '../Pages/Doctor/calender'
 import Appoinments from "../Pages/Doctor/Appoinments";
 import Profile from '../Pages/Doctor/Profile'
+import DashBoard from "../Pages/Doctor/DashBoard";
 import AppoinmentHistory from "../Pages/Doctor/AppoinmentHistory";
 function Admin() {
   return (
@@ -25,6 +26,8 @@ function Admin() {
         <Route path="/appoinments" element={<Appoinments/>} />
         <Route path="/reject" element={<Reject/>} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/dashboard" element={<DashBoard/>} />
+
         <Route path="/history" element={<AppoinmentHistory/>} />
 
 

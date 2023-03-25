@@ -77,7 +77,7 @@ const handleLogout = () => {
         <AppBar position="fixed" color={"secondary"}>
           <StyledToolbar>
             <IconBox onClick={() => navigate("/doctor/home")}>
-              <img src="./logo2.png" width={"50px"} alt="" />
+              <img src="/logo2.png" width={"50px"} alt="" />
               <Typography
                 variant="h6"
                 sx={{ display: { xs: "none", sm: "block" } }}

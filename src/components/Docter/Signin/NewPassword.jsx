@@ -28,12 +28,12 @@ function NewPassword({ phone,setNewPassword }) {
           setConfPassword(false);
           setPasswordError("");
           setConfPasswordError("");
-          axios.post("/setNewPassword", data).then((res) => {
+          axios.post("doctor/setNewPassword", data).then((res) => {
       
             if (res.data.status) {
               setNewPassword(false)
       
-              Navigate('/signin')
+              Navigate('/doctor/signin')
             } else {
        
             }
@@ -57,7 +57,7 @@ function NewPassword({ phone,setNewPassword }) {
 
   return (
     <>
-      <div className=" mt-10  bg-zinc-500 opacity-90 fixed inset-0 z-50  ">
+      <div className=" bg-zinc-500 opacity-90 fixed inset-0 z-50  ">
         <div className="flex h-screen justify-center items-center ">
           <div className="flex flex-col items-center justify-center  bg-green-300 py-12 px-10 ">
             <form
@@ -70,7 +70,7 @@ function NewPassword({ phone,setNewPassword }) {
                 placeholder="Password"
                 id="password"
                 name="password"
-                class="border my-3 border-gray-400 py-1 px-2 w-full"
+                class="border border-gray-400 py-1 px-2 w-full"
               />
               <p class="text-red-500 text-xs italic">{passwordError}</p>
               <input
@@ -78,12 +78,12 @@ function NewPassword({ phone,setNewPassword }) {
                 placeholder="ConfirmPassword"
                 id="confPassword"
                 name="confPassword"
-                class="border border-gray-400 py-1 px-2 w-full"
+                class=" my-3 border border-gray-400 py-1 px-2 w-full"
               />
               <p class="text-red-500 text-xs italic">{confPasswordError}</p>
               <p class="text-red-500 text-xs italic">{required}</p>
 
-              <button type="submit" className="mt-4">
+              <button type="sumbit" className="mt-4">
                 Submit
               </button>
             </form>

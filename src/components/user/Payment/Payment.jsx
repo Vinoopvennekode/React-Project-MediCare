@@ -1,11 +1,16 @@
 import React from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate ,useLocation} from "react-router-dom";
+import axios from "../../../axios/axios";
 function Payment() {
   const Navigate =useNavigate()
-  const{name}=useSelector((state)=>state.userLogin)
+  const location = useLocation();
+  console.log(location.state);
+  const fee=location.state.fee
+  const appoinment_id=location.state.id
+
+  const{name,id,token}=useSelector((state)=>state.userLogin)
     
     const initialOptions = {
         "client-id": "test",
@@ -13,6 +18,13 @@ function Payment() {
         intent: "capture",
         "data-client-token": "abc123xyz==",
     };
+
+
+    const payment=()=>{
+      axios.post('/paymentStatus',{data:appoinment_id},{headers:{'Authorization':token}}).then((res)=>{
+        console.log(res.data);
+      })
+    }
   return (
     <>
       <div className="mt-16">
@@ -27,7 +39,7 @@ function Payment() {
                         purchase_units: [
                             {
                                 amount: {
-                                    value: "700",
+                                    value: fee,
                                 },
                             },
                         ],
@@ -35,8 +47,9 @@ function Payment() {
                 }}
                 onApprove={(data, actions) => {
                     return actions.order.capture().then((details) => {
-                        
+                       payment();
                         alert(`Transaction completed by ${name}`);
+
                         Navigate('/')
                     });
                 }}

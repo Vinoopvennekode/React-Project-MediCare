@@ -19,18 +19,17 @@ function Home() {
       des: "Click here for apinment history",
       url: "/doctor/history",
     },
-    { name: "Profile",
-    des:'View your profile',
-    url:'/doctor/profile'
-  },
+    { name: "Profile", des: "View your profile", url: "/doctor/profile" },
+    { name: "Dashboard", des: "View Dash", url: "/doctor/dashboard" },
   ];
   return (
     <>
-      <div className="mt-20">
+      <div className="mt-16">
         <div className=" bg-[#38A3A5] w-full h-[250px] md:h-[300px]   md:flex flex-col ">
           <div className="text-white text-xl p-6 ">WELCOME DOCTOR</div>
           <div className="text-white text-3xl md:text-5xl p-6">
-          Efficiently manage appointments and provide exceptional care with our doctor appointment system .
+            Efficiently manage appointments and provide exceptional care with
+            our doctor appointment system .
           </div>
         </div>
         <div className="flex justify-center mt-9">

@@ -3,9 +3,9 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 
-import Dashboard from "./Dashboard";
+import Table from "../Table/RejectedDoctors";
 
-function Dash() {
+function RejectedDoctors() {
   const theme = useTheme();
 
   return (
@@ -22,9 +22,9 @@ function Dash() {
       }}
     >
       <Toolbar />
-      <Dashboard />
+      <Table />
     </Box>
   );
 }
 
-export default Dash;
+export default RejectedDoctors;

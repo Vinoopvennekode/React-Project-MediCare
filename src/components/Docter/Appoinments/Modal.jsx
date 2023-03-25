@@ -1,26 +1,43 @@
-import React from "react";
-import axios from'../../../axios/axios'
+import React, { useEffect, useState } from "react";
+import axios from "../../../axios/axios";
 import { useSelector } from "react-redux";
-function Modal({ setModalOn, app ,date,doctorId}) {
-  const {id}=useSelector((state)=>state.userLogin)
+
+function Modal({ setModalOn, app, date, doctorId }) {
+  const [cancel, setCancel] = useState(false);
+  const { id } = useSelector((state) => state.userLogin);
   const { token } = useSelector((state) => state.doctorLogin);
-console.log(date,'usrerererererre');
+
   const submit = (e) => {
     e.preventDefault();
     let data = new FormData(e.currentTarget);
     data = {
-      date:date,
-      doctorId:doctorId,
-      userId:id,
-        id:app._id,
-        allotedTime: data.get("allotedTime")
+      date: date,
+      doctorId: doctorId,
+      userId: id,
+      id: app._id,
+      allotedTime: data.get("allotedTime"),
     };
     console.log(data);
-axios.post('/doctor/allotedTime',data,{headers:{'Authorization':token}}).then((res)=>{
-    console.log(res.data)
-})
-setModalOn(false);
+    axios
+      .post("/doctor/allotedTime", data, { headers: { Authorization: token } })
+      .then((res) => {
+        console.log(res.data);
+      });
+    setModalOn(false);
+  };
 
+  const handleCancelAppoinment = () => {
+    axios
+      .post(
+        "/doctor/cancelAppoinment",
+        { data: app._id },
+        { headers: { Authorization: token } }
+      )
+      .then((res) => {
+        if (res.data.status === "canceled") {
+          setCancel(true);
+        }
+      });
   };
   const handleCancelClick = () => {
     setModalOn(false);
@@ -48,27 +65,42 @@ setModalOn(false);
               <p className="text-md">
                 Address <span className="text-sm"> :: {app.user.address}</span>
               </p>
+              <p className="text-md">
+                Status <span className="text-sm"> :: {app.status}</span>
+              </p>
             </div>
           </div>
-          
 
           <div className="flex justify-center mx-3">
-            <form action="" onSubmit={submit}>
-              <input type="time" name="allotedTime" />
+            {app.status === "canceled" ? (
+              "canceled"
+            ) : app.status === "checked" ? (
+              "checked"
+            ) : (
+              <form action="" onSubmit={submit}>
+                <input type="time" name="allotedTime" />
 
+                <button
+                  type="submit"
+                  className=" rounded px-4 py-2 ml-3 text-white  bg-green-400 "
+                >
+                  Approve
+                </button>
+              </form>
+            )}
+            {!(app.status === "canceled") && !(app.status === "checked") && (
               <button
-                type="submit"
-              
-                className=" rounded px-4 py-2 text-white  bg-green-400 "
+                onClick={handleCancelAppoinment}
+                className="rounded px-4 py-2 ml-4 text-white bg-red-400 "
               >
-                Approve
+                Cancel
               </button>
-            </form>
+            )}
             <button
               onClick={handleCancelClick}
               className="rounded px-4 py-2 ml-4 text-white bg-blue-500 "
             >
-              No
+              Back
             </button>
           </div>
         </div>

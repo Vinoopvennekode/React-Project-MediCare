@@ -24,7 +24,7 @@ const Banner = () => {
               Safely From Home.
             </Typography>
             <Button
-              sx={{ marginTop: "20px" }}
+              sx={{ marginTop: "20px" ,marginBottom:"20px" }}
               onClick={() => navigate("/doctors")}
               color="success"
               variant="contained"

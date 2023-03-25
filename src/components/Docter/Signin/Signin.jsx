@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../axios/axios";
-import{message }from 'antd'
+import { message } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "@mui/material/Link";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../../Store/Slice/DoctorLogin";
+import ForgotPassword from "./ForgotPassword";
+import OtpForgot from "./OtpForgot";
+import NewPassword from "./NewPassword";
 
 function SigninForm() {
   const dispatch = useDispatch();
@@ -15,6 +18,10 @@ function SigninForm() {
   const [password, setPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
+  const [forgot, setForgot] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [otpForgot, setOtpForgot] = useState(false);
+  const [newPassword, setNewPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -25,7 +32,7 @@ function SigninForm() {
       email: data.get("email"),
       password: data.get("password"),
     };
-    
+
     if (data.email && data.password) {
       const regEmail =
         /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
@@ -38,33 +45,34 @@ function SigninForm() {
           setPassword(false);
           setPasswordError("");
 
-          axios.post("/doctor/login", data).then((response) => {
-           
-            const doctor = response.data.doctorLogin;
-            if (response.data.doctorLogin.Status) {
-              dispatch(
-                setLogin({
-                  user: "doctor",
-                  name: doctor.name,
-                  id:doctor.id,
-                  token: doctor.token,
-                })
-              );
-              localStorage.setItem(
-                "doctorToken",
-                JSON.stringify(response.data.doctorLogin)
-              );
-              localStorage.setItem(
-                "docToken",
-                JSON.stringify(response.data.doctorLogin.id)
-              );
+          axios
+            .post("/doctor/login", data)
+            .then((response) => {
+              const doctor = response.data.doctorLogin;
+              if (response.data.doctorLogin.Status) {
+                dispatch(
+                  setLogin({
+                    user: "doctor",
+                    name: doctor.name,
+                    id: doctor.id,
+                    token: doctor.token,
+                  })
+                );
+                localStorage.setItem(
+                  "doctorToken",
+                  JSON.stringify(response.data.doctorLogin)
+                );
+                localStorage.setItem(
+                  "docToken",
+                  JSON.stringify(response.data.doctorLogin.id)
+                );
 
-              navigate("/doctor/home");
-            } else {
-              
-              message.error(response.data.doctorLogin.message);
-            }
-          }).catch();
+                navigate("/doctor/home");
+              } else {
+                // message.error(response.data.doctorLogin.message);
+              }
+            })
+            .catch();
         } else {
           setPassword(true);
           setPasswordError("Minimum 6 character");
@@ -78,9 +86,13 @@ function SigninForm() {
     }
   };
 
+  const modalOn = () => {
+    setForgot(true);
+  };
+
   return (
     <>
-    {<ToastContainer/>}
+      {<ToastContainer />}
       <div class="min-h-screen py-40">
         <div class="container mx-auto">
           <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
@@ -129,15 +141,37 @@ function SigninForm() {
                   >
                     Sign in
                   </button>
-                  <Link
-                    onClick={() => navigate("/doctor/signup")}
-                    variant="body2"
-                    component="button"
-                  >
-                    "Don't have an account? Sign Up"
-                  </Link>
+                  <div className=" mt-3 flex justify-between">
+                    <Link
+                      onClick={() => navigate("/doctor/signup")}
+                      variant="body2"
+                      component="button"
+                    >
+                      "Don't have an account? Sign Up"
+                    </Link>
+                    <Link onClick={modalOn} variant="body2" component="button">
+                      Forgot Password?
+                    </Link>
+                  </div>
                 </div>
               </form>
+              {forgot && (
+                <ForgotPassword
+                  setForgot={setForgot}
+                  setPhone={setPhone}
+                  setOtpForgot={setOtpForgot}
+                />
+              )}
+              {otpForgot && (
+                <OtpForgot
+                  phone={phone}
+                  setOtpForgot={setOtpForgot}
+                  setNewPassword={setNewPassword}
+                />
+              )}
+              {newPassword && (
+                <NewPassword phone={phone} setNewPassword={setNewPassword} />
+              )}
             </div>
           </div>
         </div>

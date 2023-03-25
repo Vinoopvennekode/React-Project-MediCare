@@ -35,7 +35,7 @@ function Doctors() {
     try {
       axios
         .get(
-          `/getDoctors/doctors?page=${currentPage}&limit=3&sortBy=${sortBy}&sortOrder=${sortOrder}&searchLocation=${searchLocation}&department=${department}`,
+          `/getDoctors/doctors?page=${currentPage}&limit=5&sortBy=${sortBy}&sortOrder=${sortOrder}&searchLocation=${searchLocation}&department=${department}`,
           { headers: { Authorization: token } }
         )
         .then((response) => {

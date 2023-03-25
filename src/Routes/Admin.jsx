@@ -13,6 +13,7 @@ import Users from "../Pages/Admin/Users";
 import AddDepartment from "../Pages/Admin/AddDepartment";
 import DoctorProfile from "../Pages/Admin/DoctorsProfile";
 import EditDepartment from "../Pages/Admin/EditDept";
+import RejectedDoctors from "../Pages/Admin/RejectedDoctors";
 import {AdminProtectRouters} from "../utils/ProtectRouters";
 function Admin() {
   return (
@@ -21,7 +22,9 @@ function Admin() {
         <Route path="/" element={<Signin />} />
         <Route element={<AdminProtectRouters/>}>
         <Route path="/users" element={<Users />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/doctors" element={<Doctors />} />
+        <Route path="/rejecteddoctors" element={<RejectedDoctors />} />
         <Route path="/appoinments" element={<Appoinments />} />
         <Route path="/table" element={<Table />} />
         <Route path="/test" element={<Test />} />

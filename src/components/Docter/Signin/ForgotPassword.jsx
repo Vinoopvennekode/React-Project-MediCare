@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "../../../axios/axios";
-function forgotPassword({ setForgot, setOtpForgot, setPhone }) {
+function forgotPassword({ setForgot,setOtpForgot ,setPhone}) {
   const [phoneNumber, setPhoneNumber] = useState(false);
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const [required, setRequired] = useState("");
@@ -12,14 +12,15 @@ function forgotPassword({ setForgot, setOtpForgot, setPhone }) {
       phoneNumber: data.get("phoneNumber"),
     };
     if (data.phoneNumber) {
-      setPhone(data.phoneNumber);
-      const regPhone =
-        /^(?!0000000000)\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-      if (regPhone.test(data.phoneNumber)) {
+setPhone(data.phoneNumber)
+const regPhone =  /^(?!0000000000)\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+if (regPhone.test(data.phoneNumber)) {
         setPhoneNumber(false);
         setPhoneNumberError("");
-        axios.post("/numberCheck", data).then((res) => {
+        axios.post("/doctor/numberCheck", data).then((res) => {
+        console.log(res.data);
           if (res.data.status) {
+         
             setOtpForgot(true);
             setForgot(false);
           } else {
@@ -37,16 +38,17 @@ function forgotPassword({ setForgot, setOtpForgot, setPhone }) {
   };
   return (
     <>
-      <div className=" mt-10  bg-zinc-500 opacity-90 fixed inset-0 z-50  ">
+      <div className="  bg-zinc-500 opacity-90 fixed inset-0 z-50  ">
         <div className="flex h-screen justify-center items-center ">
           <div className="flex flex-col items-center justify-center  bg-green-300 py-8 px-10 ">
             <h3 className="mb-4">Enter your Mobile Number</h3>
             <form
               onSubmit={handleSubmit}
               className="flex flex-col items-center"
+             
             >
               <input
-                type="Number"
+                type="Text"
                 placeholder="PhoneNumber"
                 id="phoneNumber"
                 name="phoneNumber"
@@ -58,10 +60,8 @@ function forgotPassword({ setForgot, setOtpForgot, setPhone }) {
                 Submit
               </button>
             </form>
-            <button onClick={() => setForgot(false)} className="mt-3 bg-green-200 text-white p-2">
-            
-              back
-            </button>
+            <button  onClick={()=>setForgot(false)} className="mt-3 bg-green-200 text-white p-2"> back</button>
+         
           </div>
         </div>
       </div>

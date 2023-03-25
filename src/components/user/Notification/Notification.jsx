@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function Notification() {
+  
   const navigate = useNavigate();
   const { id ,token} = useSelector((state) => state.userLogin);
   const [notification, setNotification] = useState([]);
@@ -88,7 +89,7 @@ function Notification() {
                       {notification.map((notification) => (
                         <div
                           className=" m-5  rounded-lg shadow bg-white  py-4 bg-opacity-50 lg:px-13 lg:mx-32"
-                          onClick={() => navigate("/payment")}
+                          onClick={() => navigate("/payment",{state:{fee:notification.fee,id:notification.id}})}
                         >
                           <h1 className="text-center text-[#dc2626]">
                             {notification.message}
@@ -118,7 +119,7 @@ function Notification() {
 
                       {seenNotification.map((notification) => (
                         <div
-                          onClick={() => navigate("payment")}
+                          onClick={() => navigate("/payment",{state:{fee:notification.fee,id:notification.id}})}
                           className=" m-5  rounded-lg shadow bg-white  py-4 bg-opacity-50 hover:bg-opacity-75 cursor-pointer lg:px-13 lg:mx-32"
                         >
                           <h1 className="text-center text-[#dc2626]">
@@ -132,7 +133,7 @@ function Notification() {
               </Tabs.TabPane>
             </Tabs>
 
-            {/*  */}
+            
           </div>
         </div>
       </div>

@@ -1,328 +1,119 @@
-import * as React from "react";
-import {
-  styled,
-  createTheme,
-  ThemeProvider,
-  useTheme,
-} from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import CategoryIcon from "@mui/icons-material/Category";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import BusinessIcon from "@mui/icons-material/Business";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import LogoutIcon from "@mui/icons-material/Logout";
-import FolderIcon from "@mui/icons-material/Folder";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-// import Swal2 from 'sweetalert2';
+import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
-// import { adminDetails } from '../../../redux/admin';
-import { setLogout } from "../../../Store/Slice/AdminLogin";
-import Table from '../Table/usertable'
+import { useSelector, useDispatch } from "react-redux";
+import Pagination from "@mui/material/Pagination";
+import { setLogin } from "../../../Store/Slice/UserLogin";
 
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
-const drawerWidth = 240;
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
-}));
-
-const mdTheme = createTheme();
-
-function AdminMain() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const handleLogout = () => {
-    dispatch(setLogout());
-    localStorage.removeItem("admintoken");
-    navigate("/admin");
-    // setcurrentUser(null);
-  };
-  const { admin } = useSelector((state) => state.adminLogin);
-
-  
-
-    
- 
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
+function Dashboard() {
+  const [dashboard, setDashboard] = useState([]);
+  const [salesReport, setSalesReport] = useState([]);
+  const { token } = useSelector((state) => state.adminLogin);
+  const arr = [
+    {
+      name: "Doctors",
+      image: "/DoctorsAdmin.png",
+      number: dashboard.doctors,
+    },
+    {
+      name: "Patients",
+      image: "/patients.png",
+      number: dashboard.users,
+    },
+    {
+      name: "Pending Doctors",
+      image: "/pending.png",
+      number: dashboard.doctorPending,
+    },
+    {
+      name: "Departments",
+      image: "/departments.png",
+      number: dashboard.departments,
+    },
+  ];
+  useEffect(() => {
+    axios
+      .get("/admin/dashboard", { headers: { Authorization: token } })
+      .then((res) => {
+        console.log(res.data);
+        setDashboard(res.data);
+        setSalesReport(res.data.salesReport)
+      });
+  }, []);
   return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex" }}>
-        
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: "24px", // keep right padding when drawer closed
-              bgcolor: "#57CC99",
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              MEDIcare ADMIN
-            </Typography>
-            <Typography variant="h6" noWrap component="div">
-              {admin?.name}
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <DrawerHeader>
-            <IconButton onClick={toggleDrawer}>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "last",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <DashboardIcon />
-                  <ListItemText sx={{ opacity: open ? 1 : 0, pl: 3 }}>
-                    Dashboard
-                  </ListItemText>
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "last",
-                  px: 2.5,
-                }}
-                // onClick={() => navigate('/admin/seeker')}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <AccountBoxIcon />
-                  <ListItemText sx={{ opacity: open ? 1 : 0, pl: 3 }}>
-                    Users
-                  </ListItemText>
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "last",
-                  px: 2.5,
-                }}
-                // onClick={() => navigate('/admin/recruiter')}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <BusinessIcon />
-                  <ListItemText sx={{ opacity: open ? 1 : 0, pl: 3 }}>
-                    Doctors
-                  </ListItemText>
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "last",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <CategoryIcon />
-                  <ListItemText sx={{ opacity: open ? 1 : 0, pl: 3 }}>
-                    Specialities
-                  </ListItemText>
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "last",
-                  px: 2.5,
-                }}
-                // onClick={() => navigate('/admin/jobs')}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <FolderIcon />
-                  <ListItemText sx={{ opacity: open ? 1 : 0, pl: 3 }}>
-                    Appoiments
-                  </ListItemText>
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "last",
-                  px: 2.5,
-                }}
-                onClick={handleLogout}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <LogoutIcon />
-                  <ListItemText sx={{ opacity: open ? 1 : 0, pl: 3 }}>
-                    Logout
-                  </ListItemText>
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-          </List>
-          <Divider />
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: () =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Toolbar />
-        <Table/>
-        </Box>
-      </Box>
-    </ThemeProvider>
+    <>
+      <div class="p-10 h-screen bg-gray-200">
+        <h1 class="text-xl mb-2">Dashboard</h1>
+        <div className="flex items-center justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {arr.map((app) => {
+              return (
+                <div>
+                  <div className=" flex justify-between card cursor-pointer  bg-gray-300 w-[250px] h-[100px] m-2 rounded-lg shadow-lg ">
+                    <div className=" ">
+                      <img
+                        className="w-[80px] h-[80px] object-cover p-2"
+                        src={app.image}
+                        alt="img"
+                      />
+                    </div>
+                    <div className=" flex flex-col  items-end  p-3 bg-">
+                      <div className="title font-semibold text-sm ">
+                        {app.name}
+                      </div>
+                      <div className="title font-semibold text-5xl my-1">
+                        {app.number}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div></div>
+        </div>
+        {salesReport.length !== 0 && (
+          <div className=" mt-10 overflow-auto rounded-lg shadow">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b-2 border-gray-200">
+                <tr>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-center">
+                    Month
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-center">
+                    Year
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-center">
+                   Total appoinments
+                  </th>
+                  <th className="p-3 text-sm font-semibold tracking-wide text-center">
+                    Total Sales
+                  </th>
+                </tr>
+              </thead>
+              <tbody className=" bg-white divide-y divide-gray-200">
+                {salesReport.map((salesReport) => (
+                  <tr className="">
+                    <td className=" p-3 text-sm text-gray-700 text-center">
+                      {salesReport.month}
+                    </td>
+                    <td className=" p-3 text-sm text-gray-700 whitespace-nowrap text-center">
+                      {salesReport.year}
+                    </td>
+                    <td className=" p-3 text-sm text-gray-700 whitespace-nowrap text-center">
+                      {salesReport.count}
+                    </td>
+                    <td className=" p-3 text-sm text-gray-700 whitespace-nowrap text-center">
+                      {salesReport.totalSales}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 
-export default function AdminDashboard() {
-  return <AdminMain />;
-}
+export default Dashboard;

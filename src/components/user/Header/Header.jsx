@@ -10,13 +10,13 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { AddAPhoto } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLogout } from "../../../Store/Slice/UserLogin";
-
+import Profile from "../Profile/Profile";
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
@@ -46,6 +46,7 @@ const theme = createTheme({
 });
 
 const Header = () => {
+  const [profile, setProfile] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentUser, setcurrentUser] = useState(null);
   const { name } = useSelector((state) => state.userLogin);
@@ -70,8 +71,8 @@ const Header = () => {
       <ThemeProvider theme={theme}>
         <AppBar position="fixed" color={"secondary"}>
           <StyledToolbar>
-            <IconBox  onClick={() => navigate("/")} >
-              <img src="./logo2.png" width={'50px'} alt="" />
+            <IconBox onClick={() => navigate("/")}>
+              <img src="./logo2.png" width={"50px"} alt="" />
               <Typography
                 variant="h6"
                 sx={{ display: { xs: "none", sm: "block" } }}
@@ -82,12 +83,15 @@ const Header = () => {
 
             {currentUser ? (
               <div className="flex">
-                <div onClick={()=>navigate('/notifications')} class="relative mr-6 inline-flex w-fit cursor-pointer">
-                {/* <div class="absolute top-0 right-0 bottom-auto left-auto z-10 inline-block translate-x-2/4 -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-400 py-1 px-2 text-center align-baseline text-xs font-bold leading-none text-white">
+                <div
+                  onClick={() => navigate("/notifications")}
+                  class="relative mr-6 inline-flex w-fit cursor-pointer"
+                >
+                  {/* <div class="absolute top-0 right-0 bottom-auto left-auto z-10 inline-block translate-x-2/4 -translate-y-1/2 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 whitespace-nowrap rounded-full bg-indigo-400 py-1 px-2 text-center align-baseline text-xs font-bold leading-none text-white">
                   99+
                 </div> */}
-                <NotificationsIcon />
-              </div>
+                  <NotificationsIcon />
+                </div>
                 <UserBox onClick={(e) => setOpen(true)}>
                   <Avatar
                     sx={{ width: "30px", height: "30px" }}
@@ -109,7 +113,9 @@ const Header = () => {
                     horizontal: "right",
                   }}
                 >
-                  <MenuItem>Profile</MenuItem>
+                  <MenuItem onClick={() => setProfile(true)}>
+                    Profile
+                  </MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>
               </div>
@@ -123,6 +129,7 @@ const Header = () => {
           </StyledToolbar>
         </AppBar>
       </ThemeProvider>
+      {profile && <Profile setProfile={setProfile} />}
     </div>
   );
 };
