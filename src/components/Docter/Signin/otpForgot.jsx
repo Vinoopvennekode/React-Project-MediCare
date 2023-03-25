@@ -3,7 +3,7 @@ import axios from "../../../axios/axios";
 import { Formik, useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 
-function OtpForgot({ phone, setOtpForgot, setNewPassword }) {
+function otpForm({ phone, setOtpForgot, setNewPassword }) {
   const Navigate = useNavigate();
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(30);
@@ -114,4 +114,4 @@ function OtpForgot({ phone, setOtpForgot, setNewPassword }) {
   );
 }
 
-export default OtpForgot;
+export default otpForm;
