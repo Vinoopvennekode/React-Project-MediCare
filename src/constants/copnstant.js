@@ -1,3 +1,4 @@
-const baseUrl = 'http://back.medicarebooking.online/';
+const baseUrl ='https://back.medicarebooking.online/';
+// const baseUrl='http://localhost:4000/'
 
 export default baseUrl;
