@@ -3,7 +3,7 @@ import axios from "../../../axios/axios";
 
 
 
-function otpForm({ phone, setOtpForgot, setNewPassword }) {
+function OtpForgot({ phone, setOtpForgot, setNewPassword }) {
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(30);
 
@@ -109,4 +109,4 @@ function otpForm({ phone, setOtpForgot, setNewPassword }) {
   );
 }
 
-export default otpForm;
+export default OtpForgot;

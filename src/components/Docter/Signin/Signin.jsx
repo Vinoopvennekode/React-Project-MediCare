@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../axios/axios";
-import { message } from "antd";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "@mui/material/Link";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../../Store/Slice/DoctorLogin";
 import ForgotPassword from "./ForgotPassword";
-import OtpForgot from './OtpForgot'
+import OtpForgotpage from './OtpForgot'
 import NewPassword from "./NewPassword";
 
 function SigninForm() {
@@ -163,7 +163,7 @@ function SigninForm() {
                 />
               )}
               {otpForgot && (
-                <OtpForgot
+                <OtpForgotpage
                   phone={phone}
                   setOtpForgot={setOtpForgot}
                   setNewPassword={setNewPassword}
