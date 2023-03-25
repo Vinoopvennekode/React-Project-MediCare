@@ -1,3 +1,3 @@
-const baseUrl = 'https://back.medicarebooking.online/';
+const baseUrl = 'http://back.medicarebooking.online/';
 
 export default baseUrl;
