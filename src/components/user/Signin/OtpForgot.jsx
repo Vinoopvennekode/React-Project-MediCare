@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "../../../axios/axios";
-import { Formik, useFormik } from "formik";
+
 import { useNavigate } from "react-router-dom";
 
 function otpForm({ phone, setOtpForgot, setNewPassword }) {

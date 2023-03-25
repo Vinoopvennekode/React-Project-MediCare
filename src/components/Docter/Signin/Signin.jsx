@@ -8,7 +8,7 @@ import Link from "@mui/material/Link";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../../Store/Slice/DoctorLogin";
 import ForgotPassword from "./ForgotPassword";
-import OtpForgotpage from '../Signin/OtpForgot'
+import OtpForgotpage from './OtpForm'
 import NewPassword from "./NewPassword";
 
 function SigninForm() {
