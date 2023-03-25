@@ -1,13 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
-import { Formik, useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+
+
 
 function otpForm({ phone, setOtpForgot, setNewPassword }) {
-  const Navigate = useNavigate();
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(30);
-  const [currentOtp, setCurrrentOtp] = useState("");
+
   const [otp, setOtp] = useState(false);
   const [otpError, setOtpError] = useState("");
   const [required, setRequired] = useState("");
@@ -44,21 +43,17 @@ function otpForm({ phone, setOtpForgot, setNewPassword }) {
     if (data.otp) {
       const regNumber = /^[0-9]+$/;
       if (regNumber.test(data.otp)) {
-      
         setOtp(false);
         setOtpError("");
         if (data.otp.length <= 6) {
-          
           setOtp(false);
           setOtpError("");
-     
+
           axios.post("/doctor/forgotOtpVerify", { data: data }).then((res) => {
-        
             if (res.data.status) {
               setOtpForgot(false);
               setNewPassword(true);
             } else {
-         
             }
           });
         } else {
