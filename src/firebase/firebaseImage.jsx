@@ -1,5 +1,3 @@
-
-
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase/firebase";
 export const firebaseImage=async(data)=>{
@@ -18,7 +16,7 @@ export const firebaseImage=async(data)=>{
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
       }).catch((err) => {
-     
+     console.log(err.message);
       });
     const imgBase = await toBase64(image);
     await uploadString(imageRef, imgBase, "data_url").then(async () => {

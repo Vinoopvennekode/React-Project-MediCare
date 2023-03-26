@@ -43,8 +43,9 @@ function Appoinments() {
       date: date,
       timeStart: data.get("TimeSlot"),
     };
- 
+ console.log(data);
     axios.post("/doctor/getappoinments", data,{headers:{'Authorization':token}}).then((res) => {
+      console.log(res.data)
       const allot = ([] = res.data.appoinments);
       setAppoinments(res.data.appoinments);
       const exist = allot.filter((e) => e.status === "approved");

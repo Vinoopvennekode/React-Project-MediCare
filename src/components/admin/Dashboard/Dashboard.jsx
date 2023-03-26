@@ -3,6 +3,9 @@ import axios from "../../../axios/axios";
 import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import { setLogin } from "../../../Store/Slice/UserLogin";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import 'jspdf-autotable';
 
 function Dashboard() {
   const [dashboard, setDashboard] = useState([]);
@@ -30,6 +33,17 @@ function Dashboard() {
       number: dashboard.departments,
     },
   ];
+
+  const downloadPDF = (table) => {
+    console.log(table);
+    html2canvas(table).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.autoTable({ html: table });
+      pdf.save("table.pdf");
+    });
+  };
+
   useEffect(() => {
     axios
       .get("/admin/dashboard", { headers: { Authorization: token } })
@@ -73,7 +87,7 @@ function Dashboard() {
         </div>
         {salesReport.length !== 0 && (
           <div className=" mt-10 overflow-auto rounded-lg shadow">
-            <table className="w-full">
+            <table id="my-table" className="w-full">
               <thead className="bg-gray-50 border-b-2 border-gray-200">
                 <tr>
                   <th className="p-3 text-sm font-semibold tracking-wide text-center">
@@ -90,7 +104,7 @@ function Dashboard() {
                   </th>
                 </tr>
               </thead>
-              <tbody className=" bg-white divide-y divide-gray-200">
+              <tbody className=" bg-white divide-y text-gray-700">
                 {salesReport.map((salesReport) => (
                   <tr className="">
                     <td className=" p-3 text-sm text-gray-700 text-center">
@@ -111,6 +125,12 @@ function Dashboard() {
             </table>
           </div>
         )}
+              <button
+            className="p-2 mt-3 bg-green-200"
+            onClick={() => downloadPDF(document.getElementById("my-table"))}
+          >
+            Download PDF
+          </button>
       </div>
     </>
   );

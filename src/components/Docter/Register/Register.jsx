@@ -58,6 +58,7 @@ function Register() {
       address: data.get("address"),
       doctorId: doctor,
     };
+    console.log(data)
     if (data.doctorimg.name) {
 
      const url =await firebaseImage(data.doctorimg)
@@ -234,13 +235,17 @@ function Register() {
                 >
                   Gender
                 </label>
-                <input
-                  type="text"
-                  id="gender"
+                <select
+                  class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   name="gender"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
-                />
+                >
+                  
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+
+                  
+                </select>
                 <p class="text-red-500 text-xs italic">{genderError}</p>
               </div>
               <div>

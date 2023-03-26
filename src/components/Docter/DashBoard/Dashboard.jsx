@@ -129,7 +129,7 @@ function DashBoard() {
             </tbody>
             
             <button
-            className="p-2 bg-green-200"
+            className="p-2 mt-4 bg-green-200"
             onClick={() => downloadPDF(document.getElementById("my-table"))}
           >
             Download PDF
