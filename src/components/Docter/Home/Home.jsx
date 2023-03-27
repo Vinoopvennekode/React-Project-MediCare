@@ -7,20 +7,34 @@ function Home() {
     {
       name: "Appoinment -pending",
       des: "select for approving appoinmnet",
+      img: "/appionmentPending.jpg",
       url: "/doctor/appoinments",
     },
     {
       name: "scheduled Appoinment",
       des: "your Scheduled appoinments Here",
+      img: "/schedulAppoinment.jpg",
       url: "/doctor/schedule",
     },
     {
       name: "Appoinment History",
       des: "Click here for apinment history",
+      img: "/appionmentHistory.jpg",
       url: "/doctor/history",
     },
-    { name: "Profile", des: "View your profile", url: "/doctor/profile" },
-    { name: "Dashboard", des: "View Dash", url: "/doctor/dashboard" },
+    {
+      name: "Profile",
+      des: "View your profile",
+      img: "/doctorProfile.jpg",
+      url: "/doctor/profile",
+    },
+
+    {
+      name: "Dashboard",
+      des: "View Dash",
+      img: "/dashBoard.png",
+      url: "/doctor/dashboard",
+    },
   ];
   return (
     <>
@@ -47,7 +61,7 @@ function Home() {
                     <div className="top">
                       <img
                         className="w-[200px] h-[200px] object-cover  p-2"
-                        src="https://www.towerdental.com.au/uploads/170/46/Untitled-design-49.png"
+                        src={app.img}
                         alt="img"
                       />
                     </div>

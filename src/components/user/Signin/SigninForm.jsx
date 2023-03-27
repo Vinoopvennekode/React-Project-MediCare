@@ -66,7 +66,6 @@ export default function SigninForm() {
   const [passwordError, setPasswordError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
 
-  
   const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData(event.currentTarget);
@@ -86,11 +85,10 @@ export default function SigninForm() {
 
           //* LOGIN FUNCTION HERE *//
           axios.post("/userLogin", data).then((response) => {
-           
             const user = response.data.userLogin;
-     
+            console.log(response.data)
+
             if (!user.Status) {
-           
               toast(user.message);
             } else {
               dispatch(
@@ -123,9 +121,7 @@ export default function SigninForm() {
   };
 
   const modalOn = () => {
-
     setForgot(true);
-   
   };
 
   return (
@@ -228,7 +224,7 @@ export default function SigninForm() {
           >
             Forgot Password?
           </Link>
-     
+
           {forgot && (
             <ForgotPassword
               setForgot={setForgot}
