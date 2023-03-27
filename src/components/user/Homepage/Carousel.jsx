@@ -64,19 +64,19 @@ const{token}=useSelector((state)=>state.userLogin)
           {departments.map((dep) => {
             return (
               <div>
-                <div className="card bg-white w-[200px] h-[310px] m-5 rounded-lg shadow-lg  ">
+                <div className="max-w-xs p-4 mx-6 rounded-md shadow-md dark:bg-gray-900 dark:text-gray-50 cursor-pointer">
                   <div className="top">
                     <img
-                      className="w-[200px] h-[200px] object-cover  p-2"
+                      className="object-cover object-center w-full rounded-md h-25 dark:bg-gray-500"
                       src={dep.deptImg}
                       alt="img"
                     />
                   </div>
                   <div className="bottom flex flex-col justify-center items-center p-3 bg-">
-                    <div className="title font-semibold text-xs my-1">
+                    <div className="block text-xs font-medium tracking-widest uppercase dark:text-violet-400">
                       {dep.name}
                     </div>
-                    <div className="category text-xs font-light my-1">
+                    <div className="text-xs  tracking-wide">
                       {dep.description}
                     </div>
 
