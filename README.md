@@ -1,4 +1,4 @@
-# Project Name
+# MediCare
 
 MEDICARE is a web application built using React JS, Express.js, and MongoDB with authentication. It provides a comprehensive platform for managing doctors, patients, appointments, and departmental operations. The project aims to streamline healthcare management processes while enhancing the skills of developers in front-end development, server-side development, and database management.
 
