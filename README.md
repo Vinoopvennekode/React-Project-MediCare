@@ -47,5 +47,5 @@ We welcome contributions to improve MEDICARE. If you would like to contribute, p
 
 ## Contact
 
-For any inquiries or suggestions, please feel free to reach out to VINOOP VENNEKODE at vinoopvennekode@gmail.com.
+For any inquiries or suggestions, please feel free to reach out me at vinoopvennekode@gmail.com.
 
