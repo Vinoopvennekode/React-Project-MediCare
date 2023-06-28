@@ -5,7 +5,6 @@ import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { storage } from "../../../firebase/firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { options } from "@mobiscroll/react";
 import { ColorRing, Dna } from "react-loader-spinner";
 import { firebaseImage } from "../../../firebase/firebaseImage";
 

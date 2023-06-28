@@ -7,7 +7,6 @@ import Reject from "../Pages/Doctor/Reject"
 import Home from '../Pages/Doctor/DoctorHome'
 import Signin from '../Pages/Doctor/Signin'
 import Schedule from '../Pages/Doctor/ScheduleTime'
-import Calender from '../Pages/Doctor/calender'
 import Appoinments from "../Pages/Doctor/Appoinments";
 import Profile from '../Pages/Doctor/Profile'
 import DashBoard from "../Pages/Doctor/DashBoard";
@@ -22,7 +21,6 @@ function Admin() {
         <Route path="/home" element={<Home/>} />
         <Route path="/signin" element={<Signin/>} />
         <Route path="/schedule" element={<Schedule/>} />
-        <Route path="/calender" element={<Calender/>} />
         <Route path="/appoinments" element={<Appoinments/>} />
         <Route path="/reject" element={<Reject/>} />
         <Route path="/profile" element={<Profile/>} />

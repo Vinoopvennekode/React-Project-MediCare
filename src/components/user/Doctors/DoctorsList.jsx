@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Datepicker } from "@mobiscroll/react";
-import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import { useNavigate } from "react-router-dom";
 function DoctorsList({ doc }) {
   const navigate =useNavigate()
