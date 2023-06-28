@@ -32,7 +32,7 @@ function Register() {
   const [address, setAddress] = useState(false);
   const [addressError, setAddressError] = useState("");
   const [totalRequired, setTotalRequired] = useState("");
-
+ 
   useEffect(() => {
     axios.get("/departments").then((res) => {
       setDepartments(res.data.departments);
@@ -58,7 +58,7 @@ function Register() {
       address: data.get("address"),
       doctorId: doctor,
     };
-    console.log(data)
+   
     if (data.doctorimg.name) {
 
      const url =await firebaseImage(data.doctorimg)
@@ -75,7 +75,7 @@ function Register() {
     } else {
       data.certificate = "";
     }
-
+    console.log(data,"data")
     if (
       data.phoneNumber &&
       data.department &&
@@ -120,12 +120,11 @@ function Register() {
                         if (data.address) {
                           setAddress(false);
                           setAddressError("");
-                      
+                      console.log('final');
                           axios
                             .post("/doctor/register", data)
                             .then((response) => {
-                          
-
+                              console.log(response.data,'respose.data');
                               if (response.data.message === "success") {
                                 setLoading(false);
                                 navigate("/doctor/approval");

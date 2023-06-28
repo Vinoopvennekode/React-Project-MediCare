@@ -52,7 +52,7 @@ const Header = () => {
   const { name } = useSelector((state) => state.userLogin);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     if (name) {
       setcurrentUser(name);
@@ -75,7 +75,7 @@ const Header = () => {
               <img src="./logo2.png" width={"50px"} alt="" />
               <Typography
                 variant="h6"
-                sx={{ display: { xs: "none", sm: "block" } }}
+                sx={{ display: { xs: "none", sm: "block" } ,cursor: 'pointer'}}
               >
                 Medi care
               </Typography>

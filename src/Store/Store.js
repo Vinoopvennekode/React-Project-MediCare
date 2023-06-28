@@ -9,17 +9,17 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+
 import storage from "redux-persist/lib/storage";
 import { AdminLoginSlice } from "./Slice/AdminLogin";
 import { userLoginSlice } from "./Slice/UserLogin";
 import { DoctorLoginSlice } from "./Slice/DoctorLogin";
 import { userBlockSlice } from "./Slice/UserBlock";
+
 const persistConfig = { key: "root", storage, version: 1 };
-const persistConfiguser = { key: "user", storage, version: 1 };   
-const persistConfigdoctor = { key: "doctor", storage, version: 1 };   
-const persistConfiguserBlock = { key: "block", storage, version: 1 };   
-
-
+const persistConfiguser = { key: "user", storage, version: 1 };
+const persistConfigdoctor = { key: "doctor", storage, version: 1 };
+const persistConfiguserBlock = { key: "block", storage, version: 1 };
 
 const userLoginPersistedReducer = persistReducer(
   persistConfiguser,
@@ -34,18 +34,18 @@ const AdminLoginPersisteReducer = persistReducer(
 const DoctorLoginPersistReducer = persistReducer(
   persistConfigdoctor,
   DoctorLoginSlice.reducer
-); 
+);
 const userBlockPersistReducer = persistReducer(
   persistConfiguserBlock,
   userBlockSlice.reducer
-); 
+);
 
 export const store = configureStore({
   reducer: {
     userLogin: userLoginPersistedReducer,
     adminLogin: AdminLoginPersisteReducer,
     doctorLogin: DoctorLoginPersistReducer,
-    userBlock:userBlockPersistReducer,
+    userBlock: userBlockPersistReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -55,4 +55,4 @@ export const store = configureStore({
     }),
 });
 
-export const persistor= persistStore(store)
+export const persistor = persistStore(store);

@@ -1,13 +1,12 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import { message, Tabs } from "antd";
 import axios from "../../../axios/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function Notification() {
-  
   const navigate = useNavigate();
-  const { id ,token} = useSelector((state) => state.userLogin);
+  const { id, token } = useSelector((state) => state.userLogin);
   const [notification, setNotification] = useState([]);
   const [seenNotification, setseenNotification] = useState([]);
 
@@ -15,27 +14,39 @@ function Notification() {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    axios.post(`/getAllNotifications`,{id},{headers:{'Authorization':token}}).then((response) => {
-      const result = response.data;
-      if (result.success) {
-        setNotification(result.clientNotifications);
-        setseenNotification(result.clientSeenNotification);
-      } else {
-        message.error(result.message);
-      }
-    });
+    axios
+      .post(
+        `/getAllNotifications`,
+        { id },
+        { headers: { Authorization: token } }
+      )
+      .then((response) => {
+        const result = response.data;
+        if (result.success) {
+          setNotification(result.clientNotifications);
+          setseenNotification(result.clientSeenNotification);
+        } else {
+          message.error(result.message);
+        }
+      });
   }, [refresh]);
 
   const handleMarkAllRead = () => {
     try {
-      axios.patch("/notificationMarkAllRead", {id},{headers:{'Authorization':token}}).then((response) => {
-        if (response.data.success) {
-          message.success(response.data.message);
-          setRefresh(!refresh);
-        } else {
-          message.error(response.data.message);
-        }
-      });
+      axios
+        .patch(
+          "/notificationMarkAllRead",
+          { id },
+          { headers: { Authorization: token } }
+        )
+        .then((response) => {
+          if (response.data.success) {
+            message.success(response.data.message);
+            setRefresh(!refresh);
+          } else {
+            message.error(response.data.message);
+          }
+        });
     } catch (error) {
       console.log(error);
       message.error("somthing went wrong");
@@ -44,14 +55,20 @@ function Notification() {
 
   const handleDeleteAllRead = () => {
     try {
-      axios.patch("/notificationDeleteAllRead", {id},{headers:{'Authorization':token}}).then((response) => {
-        if (response.data.success) {
-          message.success(response.data.message);
-          setRefresh(!refresh);
-        } else {
-          message.error(response.data.message);
-        }
-      });
+      axios
+        .patch(
+          "/notificationDeleteAllRead",
+          { id },
+          { headers: { Authorization: token } }
+        )
+        .then((response) => {
+          if (response.data.success) {
+            message.success(response.data.message);
+            setRefresh(!refresh);
+          } else {
+            message.error(response.data.message);
+          }
+        });
     } catch (error) {
       console.log(error);
       message.error("somthing went wrong");
@@ -89,7 +106,14 @@ function Notification() {
                       {notification.map((notification) => (
                         <div
                           className=" m-5  rounded-lg shadow bg-white  py-4 bg-opacity-50 lg:px-13 lg:mx-32"
-                          onClick={() => navigate("/payment",{state:{fee:notification.fee,id:notification.id}})}
+                          onClick={() =>
+                            navigate("/payment", {
+                              state: {
+                                fee: notification.fee,
+                                id: notification.id,
+                              },
+                            })
+                          }
                         >
                           <h1 className="text-center text-[#dc2626]">
                             {notification.message}
@@ -119,7 +143,14 @@ function Notification() {
 
                       {seenNotification.map((notification) => (
                         <div
-                          onClick={() => navigate("/payment",{state:{fee:notification.fee,id:notification.id}})}
+                          onClick={() =>
+                            navigate("/payment", {
+                              state: {
+                                fee: notification.fee,
+                                id: notification.id,
+                              },
+                            })
+                          }
                           className=" m-5  rounded-lg shadow bg-white  py-4 bg-opacity-50 hover:bg-opacity-75 cursor-pointer lg:px-13 lg:mx-32"
                         >
                           <h1 className="text-center text-[#dc2626]">
@@ -132,8 +163,6 @@ function Notification() {
                 </div>
               </Tabs.TabPane>
             </Tabs>
-
-            
           </div>
         </div>
       </div>

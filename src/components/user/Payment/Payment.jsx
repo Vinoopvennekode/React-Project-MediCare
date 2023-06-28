@@ -6,7 +6,6 @@ import axios from "../../../axios/axios";
 function Payment() {
   const Navigate =useNavigate()
   const location = useLocation();
-  console.log(location.state);
   const fee=location.state.fee
   const appoinment_id=location.state.id
 

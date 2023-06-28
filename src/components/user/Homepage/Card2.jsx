@@ -14,7 +14,7 @@ const Card2 = () => {
 
   return (
     <>
-      <div className="relative ">
+      <div className="relative">
         <div className=" px-4  text-xl ">
           Book an appointment for an in-clinic consultation
         </div>

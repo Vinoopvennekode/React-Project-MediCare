@@ -14,7 +14,7 @@ const HomePage = () => {
       <Banner3 />
       <Footer />
     </>
-  );
+  );    
 };
 
 export default HomePage;
